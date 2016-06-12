@@ -1,0 +1,111 @@
+?var tracert = {
+    init: function () {
+        var url = window.location.search.replace(/\?/, "");
+        var ip = url.queryStringValue("ip");
+        var serverguid = url.queryStringValue("se");
+        var _this = this;
+        if (ip) {
+            $("#ip").val(ip);
+            if (serverguid)
+                $("#serverguid").val(serverguid);
+            _this.getTracert();
+        }
+        $("#serverlist a.serveritem").click(function () {
+            $("#serverlist a.serveritem").removeClass("MoNocurt");
+            $(this).addClass("MoNocurt");
+            $("#serverguid").val($(this).attr('val'));
+            _this.getTracert();
+        });
+        $("#pnlist a").click(function () {
+            $("#pnlist a").removeClass("MoNocurt");
+            $(this).addClass("MoNocurt");
+            _this.getTracert();
+        });
+        $("#kwsubmit").click(function () {
+            _this.getTracert();
+        })
+        //$(".ddp a").removeClass("MoNocurt");
+        //$(".ddp a[val=" + serverguid + "]").addClass("MoNocurt");
+    },
+    getTracert: function () {
+        var ip = $("#ip").val();
+        var guid = $("#serverguid").val();
+        if (!ip) return;
+        jQuery.ajax({
+            type: "POST",
+            url: "/iframe.ashx?t=tracert",
+            dataType: 'jsonp',
+            data: { host: ip, guid: guid, encode: enkey },
+            beforeSend: function () {
+                document.getElementById("details").innerHTML = '<img src="/template/default/images/public/spinner.gif" align="absmiddle"> <span>正在加载数据,请稍候……</span>';
+            },
+            success: function (data) {
+                var sb = new StringBuilder();
+                sb.appendLine("<p class=\"lh40 pl10 YaHei fz14 col-green\">已经达到目的地，TraceRemote终止！</p>");
+                sb.appendLine("<ul class=\"ResultListWrap\">");
+                sb.appendLine("<li class=\"ReListCent ReListHead clearfix\"><div class=\"w5-0\">序号</div> <div class=\"w18-0\">IP地址</div> <div class=\"w60-0 tl pl10\">所在地</div> <div class=\"w10-0\">耗时(ms)</div></li>");
+                if (data.state == 0) { getid('details').innerHTML = "<div class=\"col-red\"\">" + data.msg + "</div>"; return; };
+                c = data.result;
+                var cnt = 0;
+                for (var i = 0; i < c.length; i++) {
+                    var time = c[i].time + "ms";
+                    if (c[i].Type == 12 || c[i].Type == 13) {
+                        time = "<div class=\"col-red\"\">超时</div>";
+                        cnt++;
+                    }
+                    sb.appendLine("<li class=\"ReListCent ReLists{4} clearfix\"><div class=\"w5-0\">{0}</div><div class=\"w18-0\">{1}</div><div class=\"w60-0 tl pl10\">{2}</div><div class=\"w10-0\">{3}</div></li>".format(c[i].hop, c[i].ip, c[i].ipLocation, time, i % 2 == 0 ? " bg-list" : ""));
+                }
+                getid('details').innerHTML = sb.toString();
+            }
+        });
+    }
+}
+// JavaScript Document
+$(document).ready(function () {
+    //WebCache
+    $(".WebCache").click(function () {
+
+        if ($(".ToolChoese").hasClass("autohide")) {
+            $(".ToolChoese").removeClass("autohide");
+            $(".search-write-cont").removeClass("w465");
+            $(".search-write-cont").addClass("w350");
+
+        } else {
+            $(".ToolChoese").addClass("autohide")
+            $(".search-write-cont").removeClass("w350");
+            $(".search-write-cont").addClass("w465");
+        }
+    });
+
+    //SHeadTab 
+    $(".SHeadTab a").click(function () {
+
+        var index = $(this).index();
+        $(".SHeadTab a").removeClass("StabCurt");
+        $(this).addClass("StabCurt");
+        $(".StabShow").addClass("autohide");
+        $(".StabShow").eq(index).removeClass("autohide");
+        $(this).children("i").addClass("icon")
+        $(this).siblings("a.Stab").find("i").removeClass("icon")
+
+
+    });
+
+    $(".SHeadTab02 a").click(function () {
+
+        var index = $(this).index();
+        $(".SHeadTab02 a").removeClass("StabCurt");
+        $(this).addClass("StabCurt");
+        $(".StabShow02").addClass("autohide");
+        $(".StabShow02").eq(index).removeClass("autohide");
+        $(this).children("i").addClass("icon")
+        $(this).siblings("a.Stab").find("i").removeClass("icon")
+
+    });
+
+
+
+
+
+});
+
