@@ -2,6 +2,8 @@ package crawler;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
+
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -18,6 +20,7 @@ public class Crawler {
 
 		// Configure mybatis from mybatis-config.xml
 		SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+		System.out.println(Resources.getResourceURL("mybatis"));
 		SqlSessionFactory factory = builder.build(Resources.getResourceAsStream("mybatis/mybatis-config.xml"));
 		SqlSession session =factory.openSession();
 		
@@ -38,7 +41,8 @@ public class Crawler {
 		String url="www.google.com";
 		String policyurl=driver.findElement(By.partialLinkText("Privacy")).getAttribute("href");
 		LocalDate date=LocalDate.now();
-		
+		//LocalTime tiem=LocalTime.now();
+	
 		session.insert("Policy.insert", new Policy(mainsite, url, policyurl, date.toString()));
 		session.commit();
 		session.close();
