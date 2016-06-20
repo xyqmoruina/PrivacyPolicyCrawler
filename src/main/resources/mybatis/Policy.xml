@@ -6,10 +6,8 @@
 <mapper namespace="Policy">
 
 	<insert id="insert" parameterType="Policy">
-		<!-- INSERT INTO STUDENT (NAME, BRANCH, PERCENTAGE, PHONE, EMAIL ) VALUES 
-			(#{name}, #{branch}, #{percentage}, #{phone}, #{email}); -->
-		insert into policies (mainsite, url, policyurl, date) values
-		(#{mainsite}, #{url}, #{policyurl}, #{date})
+		insert into policies (mainsite, connectingUrl, policyurl, ifByWhois, whoisRecord, date) values
+		(#{mainsite}, #{connectingUrl}, #{policyurl}, #{ifByWhois}, #{whoisRecord}, #{date})
 		<selectKey keyProperty="id" resultType="int" order="AFTER">
 			select last_insert_id() as id
 		</selectKey>

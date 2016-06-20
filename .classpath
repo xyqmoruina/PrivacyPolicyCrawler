@@ -22,7 +22,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
@@ -32,21 +32,16 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/je-5.0.73.jar"/>
-	<classpathentry kind="lib" path="lib/json-20140107.jar"/>
-	<classpathentry kind="lib" path="lib/jsoup-1.8.3.jar"/>
-	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
-	<classpathentry kind="lib" path="lib/juniversalchardet-1.0.3.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2.17.jar"/>
-	<classpathentry kind="lib" path="lib/mongo-java-driver-3.2.2.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.7.9.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.7.9.jar"/>
 	<classpathentry kind="lib" path="lib/WebCollector-2.31.jar"/>
-	<classpathentry kind="lib" path="E:/codebase/project/harlib-all-1.1.3/lib/derby.jar"/>
-	<classpathentry kind="lib" path="E:/codebase/project/harlib-all-1.1.3/lib/jackson-core-asl-1.9.13.jar"/>
-	<classpathentry kind="lib" path="E:/codebase/project/harlib-all-1.1.3/lib/junit.jar"/>
-	<classpathentry kind="lib" path="lib/harlib-jackson-1.1.3.jar"/>
-	<classpathentry kind="lib" path="lib/harlib-1.1.3.jar" sourcepath="E:/codebase/project/harlib-all-1.1.3/release/harlib-src-1.1.3.jar"/>
+	<classpathentry kind="lib" path="lib/webcollector-2.31-bin/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/webcollector-2.31-bin/je-5.0.73.jar"/>
+	<classpathentry kind="lib" path="lib/webcollector-2.31-bin/json-20140107.jar"/>
+	<classpathentry kind="lib" path="lib/webcollector-2.31-bin/jsoup-1.8.3.jar"/>
+	<classpathentry kind="lib" path="lib/webcollector-2.31-bin/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="lib/webcollector-2.31-bin/juniversalchardet-1.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/webcollector-2.31-bin/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="lib/webcollector-2.31-bin/mongo-java-driver-3.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/webcollector-2.31-bin/slf4j-api-1.7.9.jar"/>
+	<classpathentry kind="lib" path="lib/webcollector-2.31-bin/slf4j-log4j12-1.7.9.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -1,97 +1,87 @@
 package crawler;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.SocketException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.file.DirectoryIteratorException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.apache.ibatis.io.Resources;
+import org.apache.commons.net.whois.WhoisClient;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
 import com.fasterxml.jackson.core.JsonParseException;
+
 import cn.edu.hfut.dmic.webcollector.crawldb.DBManager;
 import cn.edu.hfut.dmic.webcollector.crawler.Crawler;
 import cn.edu.hfut.dmic.webcollector.fetcher.Executor;
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatum;
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;
 import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BerkeleyDBManager;
-import edu.umass.cs.benchlab.har.HarBrowser;
+import db.MyDB;
+import db.Policy;
 import edu.umass.cs.benchlab.har.HarEntries;
 import edu.umass.cs.benchlab.har.HarEntry;
 import edu.umass.cs.benchlab.har.HarLog;
-import edu.umass.cs.benchlab.har.HarWarning;
 import edu.umass.cs.benchlab.har.tools.HarFileReader;
-import net.lightbody.bmp.BrowserMobProxy;
-import net.lightbody.bmp.BrowserMobProxyServer;
-import net.lightbody.bmp.client.ClientUtil;
-import net.lightbody.bmp.core.har.Har;
-import net.lightbody.bmp.proxy.CaptureType;
+import extractor.PolicyExtractor;
+import extractor.Tld;
 
 public class PPCrawler {
 	private static MyLogger logger;
+	private MyDB db;
 	private int topN;
 	private int threads;
 	private int crawlingDepth;
-
+	private String crawlerDir;
+	private Map<String, String> host;
+	
 	static {
 		// turn off Selenium logging
 		Logger logger = Logger.getLogger("com.gargoylesoftware.htmlunit");
 		logger.setLevel(Level.OFF);
+
 	}
 
 	public PPCrawler(String crawlerDir) {
 		logger = new MyLogger(crawlerDir);
+		this.setCrawlerDir(crawlerDir);
 		topN = 100;
 		threads = 20;
 		crawlingDepth = 1;
+		getWhoisHost();
+		db=new MyDB();
 	}
 
 	public PPCrawler(String crawlerDir, int topN, int threads, int crawlingDepth) {
 		logger = new MyLogger(crawlerDir);
+		this.setCrawlerDir(crawlerDir);
 		this.topN = topN;
 		this.threads = threads;
 		this.crawlingDepth = crawlingDepth;
-	}
-
-	/**
-	 * Trivially search for link for privacy policy of driver's currently
-	 * visiting websites.
-	 * 
-	 * @param driver
-	 * @return link of privacy policy, null if not found
-	 */
-	public static String getPolicyHref(WebDriver driver) {
-		String[] terms = { "Privacy", "Privacy Policy" };
-		for (int i = 0; i < terms.length; i++) {
-			List<WebElement> list = driver.findElements(By.partialLinkText(terms[i]));
-			if (list.size() > 0) {
-				return list.get(0).getAttribute("href");
-			}
-		}
-		return null;
-
+		getWhoisHost();
+		db=new MyDB();
 	}
 
 	public int getCrawlingDepth() {
@@ -119,127 +109,156 @@ public class PPCrawler {
 	}
 
 	/**
-	 * Using Firebug and Har Export Trigger to capture driver traffic
-	 * 
-	 * @param driver
-	 * @throws IOException 
-	 * @throws URISyntaxException 
+	 * Read whois server list. Path: resources/whois_server_list.txt TODO add a
+	 * config.xml
 	 */
-	public void startWithExtension() throws IOException, URISyntaxException {
-		/*
-		File firebug = Paths.get("src/main/resources/firefox/firebug.xpi").toFile();
-		File harExportTrigger = Paths.get("src/main/resources/firefox/harexporttrigger.xpi").toFile();
-		File netExport = Paths.get("src/main/resources/firefox/netExport-0.9b7.xpi").toFile();
-		*/
-
-		ClassLoader classloader= getClass().getClassLoader();
-		File firebug=new File(PPCrawler.class.getResource("/firefox/firebug.xpi").getFile());
-		File netExport=new File(PPCrawler.class.getResource("/firefox/netExport-0.9b7.xpi").getFile());
-		FirefoxProfile profile = new FirefoxProfile();
-		
-		try {
-			profile.addExtension(firebug);
-			// profile.addExtension(harExportTrigger);
-			profile.addExtension(netExport);
+	private void getWhoisHost() {
+		try (Stream<String> stream = Files.lines(Paths.get(Tld.class.getResource("/whois_server_list.txt").toURI()))) {
+			List<Tld> tlds = new ArrayList<Tld>();
+			stream.forEach((record) -> {
+				String[] r = record.split(" ");
+				tlds.add(new Tld(r[0], r[1]));
+			});
+			host = tlds.stream().collect(Collectors.toMap(Tld::getTld, Tld::getWhoisHost));
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		/*
-		// setting fireBug
-		profile.setPreference("extensions.firebug.currentVersion", "2.0.17");
-		profile.setPreference("extensions.firebug.addonBarOpened", true);
-		profile.setPreference("extensions.firebug.console.enableSites", true);
-		profile.setPreference("extensions.firebug.script.enableSites", true);
-		profile.setPreference("extensions.firebug.net.enableSites", true);
-		profile.setPreference("extensions.firebug.previousPlacement", 1);
-		profile.setPreference("extensions.firebug.allPagesActivation", "on");
-		profile.setPreference("extensions.firebug.onByDefault", true);
-		profile.setPreference("extensions.firebug.defaultPanelName", "net");
+	}
 
-		// Setting netExport preferences
-		profile.setPreference("extensions.firebug.netexport.alwaysEnableAutoExport", true);
-		profile.setPreference("extensions.firebug.netexport.autoExportToFile", true);
-		profile.setPreference("extensions.firebug.netexport.Automation", true);
-		profile.setPreference("extensions.firebug.netexport.showPreview", false);
-		profile.setPreference("extensions.firebug.netexport.defaultLogDir", "E:\\codebase\\project\\har\\");
-		*/
-		String domain = "extensions.firebug.";
+	public void setNetworkMonitorProfile(FirefoxProfile profile, String harPath) throws IOException {
+		// FirefoxProfile profile = new FirefoxProfile();
 
-		// Set default Firebug preferences
-		profile.setPreference(domain + "currentVersion", "2.0.17"); //current version,  avoid open firebug start page
-		profile.setPreference(domain + "allPagesActivation", "on"); //Firebug is activated for all pages by default
-		profile.setPreference(domain + "defaultPanelName", "net"); //The Net panel is selected by default
-		profile.setPreference(domain + "net.enableSites", true); //Firebug Net panel is enabled by default
+		// Load extensions
+		File harExport = new File(PPCrawler.class.getResource("/firefox/harexporttrigger.xpi").getFile()); // adjust
+																											// path
+																											// as
+																											// needed
+		profile.addExtension(harExport);
 
-		// Set default NetExport preferences
-		profile.setPreference(domain + "netexport.alwaysEnableAutoExport", true); //Automatically export HAR when a page is loaded.
-		profile.setPreference(domain + "netexport.showPreview", false); //Do not show a preview for exported data
-		profile.setPreference(domain + "netexport.defaultLogDir", "E:\\codebase\\project\\har\\"); //Directory to store har file
-		profile.setPreference(domain + "netexport.defaultFileName", "www.bbc.com");
-		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability(FirefoxDriver.PROFILE, profile);
-		profile.setPreference("intl.accept_languages", "en-us");
-		//WebDriver driver = new FirefoxDriver(capabilities);
-		File pathBinary = new File("E:\\codebase\\project\\Mozilla Firefox\\bin\\firefox.exe");
-		FirefoxBinary Binary = new FirefoxBinary(pathBinary);      
-		WebDriver driver = new FirefoxDriver(Binary,profile);
-		//WebDriver driver =new FirefoxDriver();
+		// Enable the automation without having a new HAR file created for every
+		// loaded page.
+		profile.setPreference("extensions.netmonitor.har.enableAutomation", true);
+		// Set to a token that is consequently passed into all HAR API calls to
+		// verify the user.
+		profile.setPreference("extensions.netmonitor.har.contentAPIToken", "test");
+		// Set if you want to have the HAR object available without the
+		// developer toolbox being open.
+		profile.setPreference("extensions.netmonitor.har.autoConnect", true);
+
+		// Enable netmonitor
+		profile.setPreference("devtools.netmonitor.enabled", true);
+		// If set to true the final HAR file is zipped. This might represents
+		// great disk-space optimization especially if HTTP response bodies are
+		// included.
+		profile.setPreference("devtools.netmonitor.har.compress", false);
+		// Default name of the target HAR file. The default file name supports
+		// formatters
+		profile.setPreference("devtools.netmonitor.har.defaultFileName", "Autoexport_%yy%m%d_%H%M%S");
+		// Default log directory for generate HAR files. If empty all
+		// automatically generated HAR files are stored in <FF-profile>/har/logs
+		profile.setPreference("devtools.netmonitor.har.defaultLogDir", harPath);
+		// If true, a new HAR file is created for every loaded page
+		// automatically.
+		profile.setPreference("devtools.netmonitor.har.enableAutoExportToFile", true);
+		// The result HAR file is created even if there are no HTTP requests.
+		profile.setPreference("devtools.netmonitor.har.forceExport", true);
+		// If set to true, HTTP response bodies are also included in the HAR
+		// file (can produce significantly bigger amount of data).
+		profile.setPreference("devtools.netmonitor.har.includeResponseBodies", false);
+		// If set to true the export format is HARP (support for JSONP syntax
+		// that is easily transferable cross domains)
+		profile.setPreference("devtools.netmonitor.har.jsonp", false);
+		// Default name of JSONP callback (used for HARP format)
+		profile.setPreference("devtools.netmonitor.har.jsonpCallback", false);
+		// Amount of time [ms] the auto-exporter should wait after the last
+		// finished request before exporting the HAR file.
+		profile.setPreference("devtools.netmonitor.har.pageLoadedTimeout", "2500");
+
+		// return profile;
+	}
+
+	/**
+	 * Using Firebug and Har Export Trigger to capture driver traffic TODO
+	 * absolute binary path of firefox 46.0
+	 * 
+	 * @param driver
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
+	public List<String> findLinksByProxy(String url) throws IOException, URISyntaxException {
+		List<String> links = new ArrayList<String>();
+		String binPath = "/Users/jero/codebase/project/libs/Firefox.app/Contents/MacOS/firefox";
+		String harPath = System.getProperty("user.dir") + "/" + PPCrawler.logger.getHarDir();
+
+		FirefoxBinary Binary = new FirefoxBinary(new File(binPath));
+		FirefoxProfile profile = new FirefoxProfile();
+		setNetworkMonitorProfile(profile, harPath);
+		WebDriver driver = new FirefoxDriver(Binary, profile);
+		driver.manage().deleteAllCookies();
+		
 		try {
-			Thread.sleep(10000);
-			driver.get("http://www.bbc.com");
-			Thread.sleep(10000);
+			Thread.sleep(5000); // allow firebug to load its net panel
+			driver.get(url);
+			Thread.sleep(20000); // while firebug is exporting HAR
+			List<HarEntry> entries = readHar(harPath);
+			for (HarEntry e : entries) {
+				links.add(extractDomain(e.getRequest().getUrl()));
+			}
+		/*} catch (NullPointerException ne) {
+
+			try {
+				Thread.sleep(20000);
+				List<HarEntry> entries = readHar(harPath);
+				for (HarEntry e : entries) {
+					links.add(extractDomain(e.getRequest().getUrl()));
+				}
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}*/
 		} catch (InterruptedException ie) {
 			ie.printStackTrace();
 		}
 		driver.quit();
-		readHar("E:\\codebase\\project\\har\\www.bbc.co.uk+2016-06-14+10-36-06.har");
+		
+		return links;
 
 	}
 
-	public void start() throws Exception {
-		Executor executor = new Executor() {
-			public void execute(CrawlDatum datum, CrawlDatums next) throws Exception {
-				/*
-				 * FirefoxProfile profile = new FirefoxProfile();
-				 * profile.setPreference("intl.accept_languages", "en-gb");
-				 * WebDriver driver = new FirefoxDriver(profile); TODO
-				 */
+	/**
+	 * Extract domain of given url(filter out the requesting resources)
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public String extractDomain(String url) {
+		String[] str = url.split("//");
 
-				HtmlUnitDriver driver = new HtmlUnitDriver();
-				DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
-				capabilities.setCapability("intl.accept_languages", "en-gb");
-				String currentUrl = datum.getUrl();
+		return str[0] + "//" + str[1].replaceAll("/.*", "");
 
-				driver.get(currentUrl);
-				// find the link of privacy policy page
-				String policyurl = getPolicyHref(driver);
+	}
 
-				if (policyurl != null) {
-					logger.toLog("hreflog.txt", currentUrl + " Success");
-					driver.get(policyurl);
-					// write privacy policy pages to file for further extraction
-					logger.toFile(URLEncoder.encode(currentUrl, "UTF-8") + ".txt",
-							policyurl + "\n" + driver.getPageSource());
-				} else {
-					logger.toLog("hreflog.txt", currentUrl + " Fail");
-				}
-
-			}
-		};
-
-		// create a BerkeleyDBManager
-		DBManager manager = new BerkeleyDBManager("crawl");
-		// creating a crawler object need DBManager and executor
-		Crawler crawler = new Crawler(manager, executor);
-		// Logger logger = new Logger();
+	/**
+	 * Find all link in page source
+	 * @deprecated
+	 * @param url
+	 * @return
+	 */
+	public List<String> findLinksByPageSource(String url) {
+		List<String> links = new ArrayList<String>();
 		HtmlUnitDriver driver = new HtmlUnitDriver();
 		DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
 		capabilities.setCapability("intl.accept_languages", "en-gb");
-		String url = "http://www.bbc.com";
+		// String url = "http://www.bbc.com";
 
 		driver.get(url);
 		// list all the connecting websites
 		List<WebElement> list = driver.findElements(By.tagName("a"));
+		driver.quit();
 		String regex = url.replace("/", "\\/") + ".*";
 		for (WebElement e : list) {
 			String href = e.getAttribute("href");
@@ -249,118 +268,178 @@ public class PPCrawler {
 				System.out.println(" Filter out");
 			} else {
 				System.out.println();
-				crawler.addSeed(e.getAttribute("href"));
+				links.add(e.getAttribute("href"));
 			}
 		}
 
-		driver.quit();
+		return links;
+
+	}
+
+	public String getPolicyByLinkText(WebDriver driver) {
+		String[] terms = { "Privacy", "Privacy Policy", "Terms and Condition" };
+
+		try {
+			for (int i = 0; i < terms.length; i++) {
+				List<WebElement> list = driver.findElements(By.partialLinkText(terms[i]));
+				if (list.size() > 0) {
+					return list.get(0).getAttribute("href");
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+
+
+	/**
+	 * 
+	 * @param url
+	 *            protocol://url
+	 * @throws Exception
+	 */
+	public void start(String url) throws Exception {
+		Executor executor = new Executor() {
+			public void execute(CrawlDatum datum, CrawlDatums next) throws Exception {
+				String currentUrl = datum.getUrl();
+				//System.out.println("***" + currentUrl);
+				PolicyExtractor extractor = new PolicyExtractor(currentUrl);
+				extractor.extract();
+				String timestamp=LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-mm-dd-HH:MM:SS"));
+				switch (extractor.getStatus()) {
+				case SUCCESS:
+					logger.toLog("hreflog.txt", currentUrl + " Success");
+					logger.toFile(URLEncoder.encode(currentUrl, "UTF-8") + ".txt",
+							extractor.getPolicyUrl() + "\n" + extractor.getPolicy());
+					//new Policy(mainsite, connectingUrl, policyurl,0, "",date.toString()
+					db.insert(new Policy(url, currentUrl, extractor.getPolicyUrl(), 0, "", timestamp));
+					break;
+				case REFERTOWHOIS:
+					logger.toLog("hreflog.txt", currentUrl + " Refer to " + extractor.getWhoisReport());
+					db.insert(new Policy(url, currentUrl, "", 1, extractor.getWhoisReport(), timestamp));
+					break;
+				default:
+					logger.toLog("hreflog.txt", currentUrl + " Fail");
+					db.insert(new Policy(url, currentUrl, "", 0, "", timestamp));
+
+				}
+
+			}
+		};
+
+		// create a BerkeleyDBManager
+		DBManager manager = new BerkeleyDBManager("crawl");
+		// creating a crawler object need DBManager and executor
+		Crawler crawler = new Crawler(manager, executor);
+		// String url = "http://www.bbc.co.uk";
+
+		crawler.addSeed(url);// add main site
+		List<String> links = findLinksByProxy(url);
+		for (String l : links) {
+			// System.out.println("Add: "+l);
+			logger.toLog("hreflog.txt", "Add: " + l);
+			crawler.addSeed(l);
+		}
+		logger.toLog("hreflog.txt", "Total: " + links.size());
 		crawler.start(1);
 	}
 
-	public void readHar(String fileName) {
-		File f = new File(fileName);
-		HarFileReader r = new HarFileReader();
-		// HarFileWriter w = new HarFileWriter();
-		try {
-			System.out.println("Reading " + fileName);
-			HarLog log = r.readHarFile(f);
+	/**
+	 * Read all har file under given path and return url in har entries
+	 * 
+	 * @param path
+	 * @return
+	 * @throws IOException
+	 */
+	public List<HarEntry> readHar(String path) throws IOException {
+		System.out.println(path);
+		List<HarEntry> entry = null;
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(path))) {
+			for (Path s : stream) {
+				HarFileReader r = new HarFileReader();
 
-			// Access all elements as objects
-			HarBrowser browser = log.getBrowser();
-
-			HarEntries entries = log.getEntries();
-			List<HarEntry> entry = entries.getEntries();
-			int count = 1;
-			for (HarEntry e : entry) {
-				System.out.println(count++ + " " + e.getRequest().getUrl());
-
+				try {
+					System.out.println("Reading " + s.getFileName());
+					HarLog log = r.readHarFile(s.toFile());
+					HarEntries entries = log.getEntries();
+					entry = entries.getEntries();
+					/*
+					 * int count = 1; for (HarEntry e : entry) {
+					 * System.out.println(count++ + " " +
+					 * e.getRequest().getUrl());
+					 * 
+					 * }
+					 */
+				} catch (JsonParseException e) {
+					e.printStackTrace();
+					System.err.println("Parsing error during test");
+				} catch (IOException e) {
+					e.printStackTrace();
+					System.err.println("IO exception during test");
+				}
 			}
-
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-			System.err.println("Parsing error during test");
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.err.println("IO exception during test");
+		} catch (DirectoryIteratorException ex) {
+			// I/O error encounted during the iteration, the cause is an
+			// IOException
+			throw ex.getCause();
 		}
+
+		return entry;
 	}
 
-	public void readCorruptedHar(String harFile) {
-		File f = new File(harFile);
-		HarFileReader r = new HarFileReader();
+	public String getWhois(String domainName) {
+
+		StringBuilder result = new StringBuilder("");
+
+		WhoisClient whois = new WhoisClient();
 		try {
-			// All violations of the specification generate warnings
-			List<HarWarning> warnings = new ArrayList<HarWarning>();
-			HarLog l = r.readHarFile(f, warnings);
 
-			for (HarWarning w : warnings)
-				System.out.println("File:" + harFile + " - Warning:" + w);
-		} catch (JsonParseException e) {
+			// default is internic.net
+			whois.connect(WhoisClient.DEFAULT_HOST);
+			String whoisData1 = whois.query("=" + domainName);
+			result.append(whoisData1);
+			whois.disconnect();
+
+		} catch (SocketException e) {
 			e.printStackTrace();
-			// fail("Parsing error during test");
 		} catch (IOException e) {
 			e.printStackTrace();
-			// fail("IO exception during test");
 		}
-	}
 
-	public void proxy() throws IOException, InterruptedException {
-
-		BrowserMobProxy proxy = new BrowserMobProxyServer();
-		proxy.start(0);
-
-		// get the Selenium proxy object
-		Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
-
-		// configure it as a desired capability
-		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
-
-		// start the browser up
-		// WebDriver driver = new FirefoxDriver(capabilities);
-		HtmlUnitDriver driver = new HtmlUnitDriver(capabilities);
-		driver.setJavascriptEnabled(true);
-
-		// enable more detailed HAR capture, if desired (see CaptureType for the
-		// complete list)
-		proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT);
-
-		// CaptureType.RESPONSE_CONTENT);
-
-		// create a new HAR with the label "yahoo.com"
-		proxy.newHar("www.bbc.com");
-
-		// open yahoo.com
-		driver.get("http://www.bbc.com");
-		Thread.sleep(5000);
-		// get the HAR data
-		Har har = proxy.getHar();
-		EnumSet<CaptureType> set = proxy.getHarCaptureTypes();
-		for (CaptureType c : set) {
-			System.out.println(c);
-		}
-		// System.out.println(proxy.getHarCaptureTypes());
-		// har.writeTo(System.out);
-		har.writeTo(Files.newBufferedWriter(Paths.get("1.txt")));
-
-		readHar("1.txt");
-		System.out.println("fdsf");
-
-		proxy.stop();
+		return result.toString();
 
 	}
 
 	public static void main(String[] args) throws Exception {
-		PPCrawler ppc = new PPCrawler("links/bbc");
-		// ppc.start();
-		// ppc.proxy();
-		System.out.println(PPCrawler.class.getResource("/firefox/firebug.xpi"));
-		File f= new File(PPCrawler.class.getResource("/firefox/firebug.xpi").getFile());
-		System.out.println(f.exists());
+		PPCrawler ppc = new PPCrawler("links/telegraph");
 
-		System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd+HH:mm:ss")));
-		//ppc.startWithExtension();
-		//ppc.readHar("1.har");
-		
+		ppc.start("http://telegraph.co.uk");
+		// System.out.println(ppc.extractDomain("http://ichef.bbci.co.uk/images/ic/272x153/p03ydncg.jpg"));
+		/*
+		 * System.out.println(LocalDateTime.now().format(DateTimeFormatter.
+		 * ofPattern("yyyy-MM-dd+HH:mm:ss"))); LocalDateTime now =
+		 * LocalDateTime.now();
+		 * System.out.println(System.getProperty("user.dir"));
+		 * ppc.findLinksByProxy("fds"); String str =
+		 * "www.bbc.com+2016-06-15+11-48-34.har"; String[] ss =
+		 * str.replace(".har", "").split("\\+"); for (String s : ss) {
+		 * System.out.println(s); // System.out.println(str.replace(".har",
+		 * "")); } String timestampStr = ss[ss.length - 2] + "+" + ss[ss.length
+		 * - 1]; DateTimeFormatter formatter =
+		 * DateTimeFormatter.ofPattern("yyyy-MM-dd+HH-mm-ss"); LocalDateTime
+		 * timestamp = LocalDateTime.parse(timestampStr, formatter);
+		 * System.out.println(now.isAfter(timestamp)); // ppc.readHar("1.har");
+		 */
+	}
+
+	public String getCrawlerDir() {
+		return crawlerDir;
+	}
+
+	public void setCrawlerDir(String crawlerDir) {
+		this.crawlerDir = crawlerDir;
 	}
 }
