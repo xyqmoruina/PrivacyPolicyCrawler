@@ -1,0 +1,1057 @@
+https://www.lotame.com/privacy/
+<?xml version="1.0" encoding="UTF-8"?>
+<html class=" js flexbox flexboxlegacy canvas canvastext webgl touch geolocation postmessage no-websqldatabase no-indexeddb hashchange history no-draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface no-generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg no-inlinesvg smil svgclippaths" lang="en-US" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#" style="">
+  <head>
+    <style>
+      article,aside,dialog,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}mark{background:#FF0;color:#000}template{display:none}
+    </style>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=0"/>
+    <link rel="icon" type="image/png" href="https://www.lotame.com/wp-content/themes/lotame-base/dist/img/shared/favicon.png"/>
+    <link rel="alternate" type="application/rss+xml" title="Lotame Feed" href="https://www.lotame.com/feed/"/>
+    <title>
+      Data Management Platform | Lotame
+    </title>
+    <!-- This site is optimized with the Yoast SEO plugin v3.2.5 - https://yoast.com/wordpress/plugins/seo/ -->    <meta name="description" content="Lotame, a leading data management company, helps you make smarter, more profitable marketing &amp; business decisions with its Data Management Platform (DMP)."/>
+    <meta name="robots" content="noodp"/>
+    <link rel="canonical" href="https://www.lotame.com/"/>
+    <link rel="publisher" href="http://google.com/+Lotame"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="og:locale:alternate" content="en_GB"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="Data Management Platform | Lotame"/>
+    <meta property="og:description" content="Lotame, a leading data management company, helps you make smarter, more profitable marketing &amp; business decisions with its Data Management Platform (DMP)."/>
+    <meta property="og:url" content="https://www.lotame.com/"/>
+    <meta property="og:site_name" content="Lotame"/>
+    <meta property="fb:admins" content="1318220533"/>
+    <meta property="og:image" content="http://lotamecorp.wpengine.com/wp-content/uploads/2015/12/Logo_Molecule-w-Lotame-inside-copy.jpg"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:description" content="Lotame, a leading data management company, helps you make smarter, more profitable marketing &amp; business decisions with its Data Management Platform (DMP)."/>
+    <meta name="twitter:title" content="Data Management Platform | Lotame"/>
+    <meta name="twitter:site" content="@lotame"/>
+    <meta name="twitter:image" content="http://lotamecorp.wpengine.com/wp-content/uploads/2015/12/Logo_Molecule-w-Lotame-inside-copy.jpg"/>
+    <meta name="twitter:creator" content="@lotame"/>
+    <script id="hs-analytics" src="//js.hs-analytics.net/analytics/1466365500000/1867366.js">
+    </script>
+    <script async="" src="//www.google-analytics.com/analytics.js">
+    </script>
+    <script type="text/javascript" async="" src="https://ssl.google-analytics.com/ga.js">
+    </script>
+    <script type="application/ld+json">
+//<![CDATA[
+{"@context":"http:\/\/schema.org","@type":"WebSite","url":"https:\/\/www.lotame.com\/","name":"Lotame","potentialAction":{"@type":"SearchAction","target":"https:\/\/www.lotame.com\/?s={search_term_string}","query-input":"required name=search_term_string"}}
+//]]>
+    </script>
+    <script type="application/ld+json">
+//<![CDATA[
+{"@context":"http:\/\/schema.org","@type":"Organization","url":"https:\/\/www.lotame.com\/","sameAs":["https:\/\/www.facebook.com\/LotameSolutions\/","https:\/\/www.linkedin.com\/company\/lotame","http:\/\/google.com\/+Lotame","https:\/\/www.youtube.com\/channel\/UCn3_DMyR69AnWd7zm0yMXMA","https:\/\/twitter.com\/lotame"],"name":"Lotame","logo":"http:\/\/lotamecorp.wpengine.com\/wp-content\/uploads\/2015\/12\/Lotame_Logo.jpg"}
+//]]>
+    </script>
+    <!-- / Yoast SEO plugin. -->    <link rel="alternate" type="application/rss+xml" title="Lotame » Home Comments Feed" href="https://www.lotame.com/home/feed/"/>
+    <script type="text/javascript">
+//<![CDATA[
+
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"https:\/\/www.lotame.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.5.2"}};
+			!function(a,b,c){function d(a){var c,d,e,f=b.createElement("canvas"),g=f.getContext&&f.getContext("2d"),h=String.fromCharCode;if(!g||!g.fillText)return!1;switch(g.textBaseline="top",g.font="600 32px Arial",a){case"flag":return g.fillText(h(55356,56806,55356,56826),0,0),f.toDataURL().length>3e3;case"diversity":return g.fillText(h(55356,57221),0,0),c=g.getImageData(16,16,1,1).data,d=c[0]+","+c[1]+","+c[2]+","+c[3],g.fillText(h(55356,57221,55356,57343),0,0),c=g.getImageData(16,16,1,1).data,e=c[0]+","+c[1]+","+c[2]+","+c[3],d!==e;case"simple":return g.fillText(h(55357,56835),0,0),0!==g.getImageData(16,16,1,1).data[0];case"unicode8":return g.fillText(h(55356,57135),0,0),0!==g.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		
+//]]>
+    </script>
+    <script src="https://www.lotame.com/wp-includes/js/wp-emoji-release.min.js?ver=4.5.2" type="text/javascript">
+    </script>
+    <style type="text/css">
+      
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+
+    </style>
+    <link rel="stylesheet" id="vendor-css" href="https://www.lotame.com/wp-content/themes/lotame-base/dist/css/vendor.css" type="text/css" media="all"/>
+    <link rel="stylesheet" id="app-css" href="https://www.lotame.com/wp-content/themes/lotame-base/dist/css/app.css" type="text/css" media="all"/>
+    <script type="text/javascript" src="https://www.lotame.com/wp-content/themes/lotame-base/dist/js/vendor.js">
+    </script>
+    <link rel="https://api.w.org/" href="https://www.lotame.com/wp-json/"/>
+    <link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.lotame.com/xmlrpc.php?rsd"/>
+    <link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://www.lotame.com/wp-includes/wlwmanifest.xml"/>
+    <link rel="shortlink" href="https://www.lotame.com/"/>
+    <link rel="alternate" type="application/json+oembed" href="https://www.lotame.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.lotame.com%2F"/>
+    <link rel="alternate" type="text/xml+oembed" href="https://www.lotame.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.lotame.com%2F&amp;format=xml"/>
+    <script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-26610845-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+    </script>
+    <link rel="alternate" href="https://www.lotame.com/" hreflang="en-US"/>
+    <link rel="alternate" href="https://www.lotame.com/uk/home-2/" hreflang="en-GB"/>
+    <style type="text/css">
+      .recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}
+    </style>
+    <script src="https://tags.crwdcntrl.net/c/891/cc_af.js">
+    </script>
+    <script>
+//<![CDATA[
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26610845-1', 'auto');
+  ga('send', 'pageview');
+
+//]]>
+    </script>
+  </head>
+  <body class="home page page-id-6 page-template page-template-templates page-template-page-home page-template-templatespage-home-php">
+    <!--[if lt IE 8]>
+<div class="alert alert-warning">
+You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->    <nav class="mobile-navbar">
+      <div class="inner">
+        <ul id="menu-primary-navigation" class="nav navbar-nav navbar-primary">
+          <li class="dropdown menu-solutions">
+            <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="https://www.lotame.com/solutions/">
+              Solutions 
+              <b class="caret"/>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="menu-data-management-platform">
+                <a href="https://www.lotame.com/platform/">
+                  Data Management Platform
+                </a>
+              </li>
+              <li class="menu-audience-optimizer">
+                <a href="https://www.lotame.com/audienceoptimizer">
+                  Audience Optimizer
+                </a>
+              </li>
+              <li class="menu-cross-device">
+                <a href="http://www.lotamecrossdevice.com/">
+                  Cross Device
+                </a>
+              </li>
+              <li class="menu-data-exchange">
+                <a href="https://www.lotame.com/data-exchange/">
+                  Data Exchange
+                </a>
+              </li>
+              <li class="menu-insights">
+                <a href="https://www.lotame.com/insights">
+                  Insights
+                </a>
+              </li>
+              <li class="menu-smart-tv-audiences">
+                <a href="https://www.lotame.com/smartTV">
+                  Smart TV Audiences
+                </a>
+              </li>
+              <li class="menu-syndicate">
+                <a href="https://www.lotame.com/syndicate">
+                  Syndicate
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="menu-approach">
+            <a href="https://www.lotame.com/approach/">
+              Approach
+            </a>
+          </li>
+          <li class="menu-news-resources">
+            <a href="https://www.lotame.com/news-resources/">
+              News &amp; Resources
+            </a>
+          </li>
+          <li class="menu-about">
+            <a href="https://www.lotame.com/about/">
+              About
+            </a>
+          </li>
+          <li>
+            <!-- Request button -->            <a class="" href="/en/contact/?req=RequestADemo#contactform">
+              
+  REQUEST DEMO
+            </a>
+          </li>
+        </ul>
+        <ul id="menu-top-menu-english-us" class="nav navbar-nav navbar-secondary">
+          <li class="menu-careers">
+            <a href="https://www.lotame.com/careers/">
+              Careers
+            </a>
+          </li>
+          <li class="menu-contact">
+            <a href="https://www.lotame.com/contact/">
+              Contact
+            </a>
+          </li>
+          <li class="menu-privacy">
+            <a href="https://www.lotame.com/privacy/">
+              Privacy
+            </a>
+          </li>
+          <li class="menu-log-in">
+            <a href="//platform.lotame.com">
+              Log In
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="home-menu-item hidden">
+        <li>
+          <a href="https://www.lotame.com">
+            Home
+          </a>
+        </li>
+      </div>
+      <div class="request-demo-menu-item hidden">
+      </div>
+      <script>
+//<![CDATA[
+
+    $(document).ready(function () {
+      app.components.mobileNavBar.init();
+    });
+  
+//]]>
+      </script>
+    </nav>
+    <nav class="banner navbar navbar-default navbar-fixed-top">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed mobile-navbar-toggle">
+          <span class="sr-only">
+            Toggle navigation
+          </span>
+          <span class="icon-bar">
+          </span>
+          <span class="icon-bar">
+          </span>
+          <span class="icon-bar">
+          </span>
+        </button>
+      </div>
+      <div class="menus">
+        <div class="top-menu">
+          <div class="collapse navbar-collapse" role="navigation">
+            <!--
+<ul id="language-dropdown" class="nav navbar-nav navbar-right">
+  <li class="dropdown languages">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+      <img src="" alt="">
+    </a>
+        <ul class="dropdown-menu languages" role="menu">
+      	<li class="lang-item lang-item-104 lang-item-uk"><a hreflang="en-GB" href="https://www.lotame.com/uk/home-2/"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAALCAIAAAD5gJpuAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAflJREFUeNpinDRzn5qN3uFDt16+YWBg+Pv339+KGN0rbVP+//2rW5tf0Hfy/2+mr99+yKpyOl3Ydt8njEWIn8f9zj639NC7j78eP//8739GVUUhNUNuhl8//ysKeZrJ/v7z10Zb2PTQTIY1XZO2Xmfad+f7XgkXxuUrVB6cjPVXef78JyMjA8PFuwyX7gAZj97+T2e9o3d4BWNp84K1NzubTjAB3fH0+fv6N3qP/ir9bW6ozNQCijB8/8zw/TuQ7r4/ndvN5mZgkpPXiis3Pv34+ZPh5t23//79Rwehof/9/NDEgMrOXHvJcrllgpoRN8PFOwy/fzP8+gUlgZI/f/5xcPj/69e/37//AUX+/mXRkN555gsOG2xt/5hZQMwF4r9///75++f3nz8nr75gSms82jfvQnT6zqvXPjC8e/srJQHo9P9fvwNtAHmG4f8zZ6dDc3bIyM2LTNlsbtfM9OPHH3FhtqUz3eXX9H+cOy9ZMB2o6t/Pn0DHMPz/b+2wXGTvPlPGFxdcD+mZyjP8+8MUE6sa7a/xo6Pykn1s4zdzIZ6///8zMGpKM2pKAB0jqy4UE7/msKat6Jw5mafrsxNtWZ6/fjvNLW29qv25pQd///n+5+/fxDDVbcc//P/zx/36m5Ub9zL8+7t66yEROcHK7q5bldMBAgwADcRBCuVLfoEAAAAASUVORK5CYII=" title="Queen&#039;s English" alt="Queen&#039;s English" /><span style="margin-left:0.3em;">Queen&#039;s English</span></a></li>
+    </ul>
+      </li>
+</ul>
+-->            <ul id="menu-top-menu-english-us-1" class="nav navbar-nav navbar-right secondary-menu">
+              <li class="menu-careers">
+                <a href="https://www.lotame.com/careers/">
+                  Careers
+                </a>
+              </li>
+              <li class="menu-contact">
+                <a href="https://www.lotame.com/contact/">
+                  Contact
+                </a>
+              </li>
+              <li class="menu-privacy">
+                <a href="https://www.lotame.com/privacy/">
+                  Privacy
+                </a>
+              </li>
+              <li class="menu-log-in">
+                <a href="//platform.lotame.com">
+                  Log In
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="main-navbar collapse navbar-collapse">
+          <a class="navbar-brand up" href="https://www.lotame.com/">
+          </a>
+          <ul class="nav navbar-nav navbar-right request-button">
+            <li>
+              <!-- Request button -->              <a class="btn btn-green " href="/en/contact/?req=RequestADemo#contactform">
+                
+  REQUEST DEMO
+              </a>
+            </li>
+          </ul>
+          <ul id="menu-primary-navigation-1" class="nav navbar-nav navbar-right primary-menu">
+            <li class="dropdown menu-solutions">
+              <a class="dropdown-toggle" data-toggle="dropdown" data-target="https://www.lotame.com/solutions/" href="https://www.lotame.com/solutions/">
+                Solutions 
+                <b class="caret"/>
+              </a>
+              <ul class="dropdown-menu">
+                <li class="menu-data-management-platform">
+                  <a href="https://www.lotame.com/platform/">
+                    Data Management Platform
+                  </a>
+                </li>
+                <li class="menu-audience-optimizer">
+                  <a href="https://www.lotame.com/audienceoptimizer">
+                    Audience Optimizer
+                  </a>
+                </li>
+                <li class="menu-cross-device">
+                  <a href="http://www.lotamecrossdevice.com/">
+                    Cross Device
+                  </a>
+                </li>
+                <li class="menu-data-exchange">
+                  <a href="https://www.lotame.com/data-exchange/">
+                    Data Exchange
+                  </a>
+                </li>
+                <li class="menu-insights">
+                  <a href="https://www.lotame.com/insights">
+                    Insights
+                  </a>
+                </li>
+                <li class="menu-smart-tv-audiences">
+                  <a href="https://www.lotame.com/smartTV">
+                    Smart TV Audiences
+                  </a>
+                </li>
+                <li class="menu-syndicate">
+                  <a href="https://www.lotame.com/syndicate">
+                    Syndicate
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="menu-approach">
+              <a href="https://www.lotame.com/approach/">
+                Approach
+              </a>
+            </li>
+            <li class="menu-news-resources">
+              <a href="https://www.lotame.com/news-resources/">
+                News &amp; Resources
+              </a>
+            </li>
+            <li class="menu-about">
+              <a href="https://www.lotame.com/about/">
+                About
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <script>
+//<![CDATA[
+
+  $("document").ready(function() {
+    app.components.navbar.init();
+  });
+
+//]]>
+    </script>
+    <div class="wrap" role="document">
+      <div class="content">
+        <main class="main" role="main">
+          <div id="home-page">
+            <!-- HERO CAROUSEL -->            <div id="hero_1466364992" class="hero-full container-fluid center-bg" style="background-image: none; height: 605px;" data-image-url="https://www.lotame.com/wp-content/uploads/2015/04/Platform.jpg">
+              <div class="content text-left">
+                <h1>
+                  <strong>
+                    Data.
+                  </strong>
+                   It's Changing Everything
+                </h1>
+                <p>
+                </p>
+                <p>
+                  Data should influence everything you do – from the products and content you create, to the way you shape and execute your go-to-market strategy. Lotame’s 
+                  <a href="/platform/">
+                    data management platform
+                  </a>
+                   makes this vision a reality. Our SaaS platform is used by marketers, agencies and publishers around the world to make audience data meaningful and actionable.
+                </p>
+                <p>
+                </p>
+                <!-- Request button -->                <a class="btn btn-green right-arrow-caret" href="/en/contact/?req=RequestADemo#contactform">
+                  
+  REQUEST DEMO
+                  <i class="icon-arrow-right">
+                  </i>
+                </a>
+              </div>
+              <video class="hero-video" autoplay="" loop="" muted="">
+                <source src="https://www.lotame.com/wp-content/uploads/2015/04/Lotame_Reel.mp4" type="video/mp4"/>
+                <source src="" type="video/webm"/>
+                <source src="" type="video/ogg"/>
+              </video>
+              <div class="arrow-down">
+                <i class="icon-chevron-down hidden-xs">
+                </i>
+              </div>
+            </div>
+            <script>
+//<![CDATA[
+
+  $(document).ready(function() {
+    app.components.hero_container.init('hero_1466364992');
+  });
+
+//]]>
+            </script>
+            <!-- VALUE LINKS -->            <div class=" valueLinks container-fluid black-font">
+              <div class="container">
+                <h1>
+                  Do What You do Best - 
+                  <strong>
+                    Better
+                  </strong>
+                </h1>
+                <div class="inner">
+                  <div class="valueLink  col-xs-12 col-sm-6">
+                    <div class="col-sm-3 col-xs-12">
+                      <img src="https://www.lotame.com/wp-content/themes/lotame-base/dist/img/home/icon-advertiser.svg"/>
+                    </div>
+                    <div class="valueLink-content col-sm-9 col-xs-12">
+                      <h4>
+                        Marketers
+                      </h4>
+                      <p>
+                        Learn more about your most valuable customers and make smarter advertising decisions.
+                      </p>
+                      <div class="buttonContainer">
+                        <a class="btn btn-orange right-arrow-caret" href="/en/market">
+                          MORE
+                          <i class="icon-arrow-right">
+                          </i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="valueLink  col-xs-12 col-sm-6">
+                    <div class="col-sm-3 col-xs-12">
+                      <img src="https://www.lotame.com/wp-content/themes/lotame-base/dist/img/home/icon-publisher.svg"/>
+                    </div>
+                    <div class="valueLink-content col-sm-9 col-xs-12">
+                      <h4>
+                        Publishers
+                      </h4>
+                      <p>
+                        Increase your advertising revenue and make your content too relevant to ignore.
+                      </p>
+                      <div class="buttonContainer">
+                        <a class="btn btn-orange right-arrow-caret" href="/en/publisher">
+                          MORE
+                          <i class="icon-arrow-right">
+                          </i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="clearfix">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <script>
+//<![CDATA[
+
+  $("document").ready(function() {
+    app.components.valueLinks.init();
+  });
+
+//]]>
+            </script>
+            <!-- SUMMARY -->            <div class="container-fluid approach content-block center-bg white-font">
+              <div class="container ">
+                <h1>
+                  <strong>
+                    Our Platform:
+                  </strong>
+                   Taking the BIG Out of Data.
+                </h1>
+                <p>
+                  Since 2006, Lotame has been designing technology that distills disparate data points into their purest form: nuggets of insight that can be used to underpin product, marketing and business decisions. This technology is packaged in a powerful but easy to use SaaS platform, which continually evolves to meet changing market needs.
+                </p>
+                <a href="/en/platform" class="btn btn-white right-arrow-caret">
+                  MORE
+                  <i class="icon-arrow-right">
+                  </i>
+                </a>
+              </div>
+            </div>
+            <div class="container-fluid platform content-block center-bg white-font">
+              <div class="container">
+                <h1>
+                  <strong>
+                    Our Approach:
+                  </strong>
+                   People-First Partnerships 
+                </h1>
+                <p>
+                  The data landscape is in a constant state of flux. New devices offer rich new streams of data to leverage, and emerging technology creates exciting opportunities for data activation. Staying ahead of this evolution needs more than just technology – it requires people who are passionate about data and its potential for business transformation. 
+                </p>
+                <a href="/en/approach" class="btn btn-green right-arrow-caret">
+                  MORE
+                  <i class="icon-arrow-right">
+                  </i>
+                </a>
+              </div>
+            </div>
+            <div class="container-fluid data-exchange content-block center-bg white-font">
+              <div class="container ">
+                <h1>
+                  <strong>
+                    Our Data Exchange:
+                  </strong>
+                   The World's Data at Your Fingertips
+                </h1>
+                <p>
+                  Lotame operates one of the world’s largest third-party data networks, which you can use to underpin your marketing and monetization strategies. We also have relationships with every major third-party data provider giving you instant access to a deep pool of highly granular audience segments.
+                </p>
+                <a href="/en/data-exchange" class="btn btn-white-orange right-arrow-caret">
+                  MORE
+                  <i class="icon-arrow-right">
+                  </i>
+                </a>
+              </div>
+            </div>
+            <!-- NEWS & RESOURCES -->            <div class="container-fluid">
+              <div class="featured-resources container">
+                <h1>
+                  News &amp; Resources
+                </h1>
+                <div class="cards-container row">
+                  <div class="card-wrapper">
+                    <article id="resource-card-5766f44017912" class="resource-card">
+                      <div class="inner">
+                        <figure>
+                          <img src="https://www.lotame.com/wp-content/uploads/2016/03/Rise_NR.jpg" class="img-responsive" alt="preview"/>
+                        </figure>
+                        <div class="card-content">
+                          <span class="type">
+                            Case Studies
+                          </span>
+                          <h1 style="word-wrap: break-word;">
+                            Case Study: Agency Increases Conversions 80% with Audience Optimizer
+                          </h1>
+                          <h2>
+                            March 22, 2016
+                          </h2>
+                          <p style="word-wrap: break-word;">
+                            Digital Agency Rise Interactive partnered with Lotame to deploy Audience Optimizer, which led to an 80% increase in conversions for their digital ad campaign. 
+                          </p>
+                          <a class="read-more" href="https://www.lotame.com/resource/case-study-agency-increases-conversions-80-lotame/">
+                            READ MORE
+                          </a>
+                        </div>
+                      </div>
+                      <div class="loader ">
+                        <div class="dot1">
+                        </div>
+                        <div class="dot2">
+                        </div>
+                      </div>
+                      <script>
+//<![CDATA[
+
+    $("document").ready(function() {
+      app.components.resourceCard.init("#resource-card-5766f44017912");
+    });
+  
+//]]>
+                      </script>
+                    </article>
+                  </div>
+                  <div class="card-wrapper">
+                    <article id="resource-card-5766f440191c1" class="resource-card">
+                      <div class="inner">
+                        <figure>
+                          <img src="https://www.lotame.com/wp-content/uploads/2015/04/CrossDeviceWP-336x179.png" class="img-responsive" alt="preview"/>
+                        </figure>
+                        <div class="card-content">
+                          <span class="type">
+                            Whitepapers
+                          </span>
+                          <h1 style="word-wrap: break-word;">
+                            Introducing Cross-Device User Identification
+                          </h1>
+                          <h2>
+                            August 2, 2015
+                          </h2>
+                          <p style="word-wrap: break-word;">
+                            Connecting digital devices can transform your data management strategy and deliver significant value to your business. Learn more about this technology in this whitepaper.
+                          </p>
+                          <a class="read-more" href="https://www.lotame.com/resource/cross-device-user-identification/">
+                            READ MORE
+                          </a>
+                        </div>
+                      </div>
+                      <div class="loader ">
+                        <div class="dot1">
+                        </div>
+                        <div class="dot2">
+                        </div>
+                      </div>
+                      <script>
+//<![CDATA[
+
+    $("document").ready(function() {
+      app.components.resourceCard.init("#resource-card-5766f440191c1");
+    });
+  
+//]]>
+                      </script>
+                    </article>
+                  </div>
+                  <div class="card-wrapper">
+                    <article id="resource-card-5766f4401a9c4" class="resource-card">
+                      <div class="inner">
+                        <figure>
+                          <img src="https://www.lotame.com/wp-content/uploads/2016/06/about.com_NR.png" class="img-responsive" alt="preview"/>
+                        </figure>
+                        <div class="card-content">
+                          <span class="type">
+                            Case Studies
+                          </span>
+                          <h1 style="word-wrap: break-word;">
+                            Case Study: About.com Increases CTR 84% with Lotame DMP
+                          </h1>
+                          <h2>
+                            June 13, 2016
+                          </h2>
+                          <p style="word-wrap: break-word;">
+                            About.com looked to Lotame to increase the click-through rate (CTR) for a travel-focused ad campaign in the most cost-efficient way possible. 
+                          </p>
+                          <a class="read-more" href="https://www.lotame.com/resource/about-com_cs/">
+                            READ MORE
+                          </a>
+                        </div>
+                      </div>
+                      <div class="loader ">
+                        <div class="dot1">
+                        </div>
+                        <div class="dot2">
+                        </div>
+                      </div>
+                      <script>
+//<![CDATA[
+
+    $("document").ready(function() {
+      app.components.resourceCard.init("#resource-card-5766f4401a9c4");
+    });
+  
+//]]>
+                      </script>
+                    </article>
+                  </div>
+                  <div class="card-wrapper">
+                    <article id="resource-card-5766f4401c0bd" class="resource-card">
+                      <div class="inner">
+                        <figure>
+                          <img src="https://www.lotame.com/wp-content/uploads/2016/06/DMP-NR.png" class="img-responsive" alt="preview"/>
+                        </figure>
+                        <div class="card-content">
+                          <span class="type">
+                            Thought Pieces
+                          </span>
+                          <h1 style="word-wrap: break-word;">
+                            DMPs: Fact vs. Fiction
+                          </h1>
+                          <h2>
+                            June 9, 2016
+                          </h2>
+                          <p style="word-wrap: break-word;">
+                            Today we are going to debunk the myths and misconceptions surrounding DMPs, and learn about what DMPs really can do for you. 
+                          </p>
+                          <a class="read-more" href="https://www.lotame.com/resource/dmps-fact-vs-fiction/">
+                            READ MORE
+                          </a>
+                        </div>
+                      </div>
+                      <div class="loader ">
+                        <div class="dot1">
+                        </div>
+                        <div class="dot2">
+                        </div>
+                      </div>
+                      <script>
+//<![CDATA[
+
+    $("document").ready(function() {
+      app.components.resourceCard.init("#resource-card-5766f4401c0bd");
+    });
+  
+//]]>
+                      </script>
+                    </article>
+                  </div>
+                  <div class="card-wrapper">
+                    <article id="resource-card-5766f4401d9c3" class="resource-card">
+                      <div class="inner">
+                        <figure>
+                          <img src="https://www.lotame.com/wp-content/uploads/2016/06/Hashmi_NR.png" class="img-responsive" alt="preview"/>
+                        </figure>
+                        <div class="card-content">
+                          <span class="type">
+                            Company Updates
+                          </span>
+                          <h1 style="word-wrap: break-word;">
+                            “Under the Hood” with Hashmi Parmar
+                          </h1>
+                          <h2>
+                            June 8, 2016
+                          </h2>
+                          <p style="word-wrap: break-word;">
+                            This week's “Under the Hood” interview is with Hashmi Parmar, Director of Global Client Success, EMEA. Hashmi is based out of Lotame’s London office, but you can usually find her running around and getting to know 
+                          </p>
+                          <a class="read-more" href="https://www.lotame.com/resource/hood-hashmi-parmar/">
+                            READ MORE
+                          </a>
+                        </div>
+                      </div>
+                      <div class="loader ">
+                        <div class="dot1">
+                        </div>
+                        <div class="dot2">
+                        </div>
+                      </div>
+                      <script>
+//<![CDATA[
+
+    $("document").ready(function() {
+      app.components.resourceCard.init("#resource-card-5766f4401d9c3");
+    });
+  
+//]]>
+                      </script>
+                    </article>
+                  </div>
+                  <div class="card-wrapper">
+                    <article id="resource-card-5766f4401f346" class="resource-card">
+                      <div class="inner">
+                        <figure>
+                          <img src="https://www.lotame.com/wp-content/uploads/2016/06/viewability_NR.png" class="img-responsive" alt="preview"/>
+                        </figure>
+                        <div class="card-content">
+                          <span class="type">
+                            Thought Pieces
+                          </span>
+                          <h1 style="word-wrap: break-word;">
+                            How DMPs Can Help Solve the Viewability Issue
+                          </h1>
+                          <h2>
+                            June 7, 2016
+                          </h2>
+                          <p style="word-wrap: break-word;">
+                            How many people actually saw this ad campaign? It’s a simple question, but depending on the target audience, the type of ad, and the content destination, figuring out the answer can be quite complicated.
+                          </p>
+                          <a class="read-more" href="https://www.lotame.com/resource/dmps-can-help-solve-viewability-issue/">
+                            READ MORE
+                          </a>
+                        </div>
+                      </div>
+                      <div class="loader ">
+                        <div class="dot1">
+                        </div>
+                        <div class="dot2">
+                        </div>
+                      </div>
+                      <script>
+//<![CDATA[
+
+    $("document").ready(function() {
+      app.components.resourceCard.init("#resource-card-5766f4401f346");
+    });
+  
+//]]>
+                      </script>
+                    </article>
+                  </div>
+                </div>
+                <i class="navigation-indicator left-indicator icon-chevron-left">
+                </i>
+                <i class="navigation-indicator right-indicator icon-chevron-right">
+                </i>
+                <div class="text-center">
+                  <a href="/news-resources" class="btn btn-green right-arrow-caret">
+                    VIEW ALL
+                    <i class="icon-arrow-right">
+                    </i>
+                  </a>
+                </div>
+                <script>
+//<![CDATA[
+
+    $("document").ready(function() {
+      app.components.featuredResources.init();
+    });
+  
+//]]>
+                </script>
+              </div>
+            </div>
+          </div>
+        </main>
+        <!-- /.main -->      </div>
+      <!-- /.content -->    </div>
+    <!-- /.wrap -->    <footer class="footer content-info" role="contentinfo">
+      <div class="main-section ">
+        <div class="container">
+          <div class="row">
+            <!-- VISIBLE XS - LOGO -->            <div class="col-xs-12 visible-xs-block">
+              <a class="logo" href="https://www.lotame.com/">
+              </a>
+            </div>
+            <!-- VISIBLE XS - SOCIAL LINKS -->            <div class="col-xs-12 visible-xs-block">
+              <div class="social-links">
+                <a href="https://www.facebook.com/LotameSolutions" target="_blank">
+                  <i class="icon-logo-fb">
+                  </i>
+                </a>
+                <a href="https://twitter.com/lotame" target="_blank">
+                  <i class="icon-logo-twitter">
+                  </i>
+                </a>
+                <a href="https://www.linkedin.com/company/64620?trk=srch_hero_comp_name" target="_blank">
+                  <i class="icon-logo-linkedin">
+                  </i>
+                </a>
+                <a href="https://www.youtube.com/channel/UCn3_DMyR69AnWd7zm0yMXMA" target="_blank">
+                  <i class="icon-youtube">
+                  </i>
+                </a>
+              </div>
+            </div>
+            <!-- HIDDEN XS - LOGO AND MENU-->            <div class="col-sm-6 hidden-xs">
+              <div class="row">
+                <div class="col-sm-12">
+                  <a class="logo" href="https://www.lotame.com/">
+                  </a>
+                </div>
+                <div class="col-sm-12 ">
+                  <ul id="menu-top-menu-english-us-2" class="footer-nav text-center">
+                    <li class="menu-careers">
+                      <a href="https://www.lotame.com/careers/">
+                        Careers
+                      </a>
+                    </li>
+                    <li class="menu-contact">
+                      <a href="https://www.lotame.com/contact/">
+                        Contact
+                      </a>
+                    </li>
+                    <li class="menu-privacy">
+                      <a href="https://www.lotame.com/privacy/">
+                        Privacy
+                      </a>
+                    </li>
+                    <li class="menu-log-in">
+                      <a href="//platform.lotame.com">
+                        Log In
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- ALWAYS VISIBLE - FORM -->            <div class="col-xs-12 col-sm-6">
+              <label class="form-title">
+                GET DATA SMART
+              </label>
+              <div class="gf_browser_unknown gform_wrapper" id="gform_wrapper_2">
+                <form method="post" enctype="multipart/form-data" id="gform_2" action="/">
+                  <div class="gform_body">
+                    <ul id="gform_fields_2" class="gform_fields top_label form_sublabel_below description_below">
+                      <li id="field_2_1" class="gfield gfield_contains_required field_sublabel_below field_description_below">
+                        <label class="gfield_label" for="input_2_1">
+                          Email
+                          <span class="gfield_required">
+                            *
+                          </span>
+                        </label>
+                        <div class="ginput_container ginput_container_email">
+                          <input name="input_1" id="input_2_1" type="text" value="" class="medium" tabindex="1" placeholder="NEWSLETTER SIGN UP"/>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="gform_footer top_label">
+                    <button class="mktoButton btn btn-green" id="gform_submit_button_2">
+                      <span>
+                        SUBMIT
+                        <i class="icon-arrow-right">
+                        </i>
+                      </span>
+                    </button>
+                    <input type="hidden" class="gform_hidden" name="is_submit_2" value="1"/>
+                    <input type="hidden" class="gform_hidden" name="gform_submit" value="2"/>
+                    <input type="hidden" class="gform_hidden" name="gform_unique_id" value=""/>
+                    <input type="hidden" class="gform_hidden" name="state_2" value="WyJbXSIsIjNmNGFiMWFmMWQyYWQ3YzljYTM2MmU0N2QxOTcyYTlmIl0="/>
+                    <input type="hidden" class="gform_hidden" name="gform_target_page_number_2" id="gform_target_page_number_2" value="0"/>
+                    <input type="hidden" class="gform_hidden" name="gform_source_page_number_2" id="gform_source_page_number_2" value="1"/>
+                    <input type="hidden" name="gform_field_values" value=""/>
+                  </div>
+                </form>
+              </div>
+              <script type="text/javascript">
+//<![CDATA[
+ jQuery(document).bind('gform_post_render', function(event, formId, currentPage){if(formId == 2) {if(typeof Placeholders != 'undefined'){
+                        Placeholders.enable();
+                    }} } );jQuery(document).bind('gform_post_conditional_logic', function(event, formId, fields, isInit){} );
+//]]>
+              </script>
+              <script type="text/javascript">
+//<![CDATA[
+ jQuery(document).ready(function(){jQuery(document).trigger('gform_post_render', [2, 1]) } ); 
+//]]>
+              </script>
+            </div>
+            <!-- VISIBLE XS MENU -->            <div class="col-xs-12 visible-xs-block ">
+              <ul id="menu-top-menu-english-us-3" class=" footer-nav text-center">
+                <li class="menu-careers">
+                  <a href="https://www.lotame.com/careers/">
+                    Careers
+                  </a>
+                </li>
+                <li class="menu-contact">
+                  <a href="https://www.lotame.com/contact/">
+                    Contact
+                  </a>
+                </li>
+                <li class="menu-privacy">
+                  <a href="https://www.lotame.com/privacy/">
+                    Privacy
+                  </a>
+                </li>
+                <li class="menu-log-in">
+                  <a href="//platform.lotame.com">
+                    Log In
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- VISIBLE XS - COPYRIGHT -->            <div class="text-center col-xs-12 visible-xs-block">
+              <div class="copyright">
+                Copyright 2016 Lotame Solutions, Inc.
+              </div>
+            </div>
+            <!-- HIDDEN XS - COPYRIGHT AND SOCIAL LINKS -->            <div class="col-sm-12 hidden-xs">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="copyright">
+                    Copyright 2016 Lotame Solutions, Inc.
+                  </div>
+                </div>
+                <div class="col-sm-6 text-right">
+                  <div class="social-links">
+                    <a href="https://www.facebook.com/LotameSolutions" target="_blank">
+                      <i class="icon-logo-fb">
+                      </i>
+                    </a>
+                    <a href="https://twitter.com/lotame" target="_blank">
+                      <i class="icon-logo-twitter">
+                      </i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/64620?trk=srch_hero_comp_name" target="_blank">
+                      <i class="icon-logo-linkedin">
+                      </i>
+                    </a>
+                    <a href="https://www.youtube.com/channel/UCn3_DMyR69AnWd7zm0yMXMA" target="_blank">
+                      <i class="icon-youtube">
+                      </i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Start of Async HubSpot Analytics Code -->      <script type="text/javascript">
+//<![CDATA[
+
+    (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+      n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/1867366.js';
+      e.parentNode.insertBefore(n, e);
+    })(document,"script","hs-analytics",300000);
+  
+//]]>
+      </script>
+      <!-- End of Async HubSpot Analytics Code -->    </footer>
+    <script>
+//<![CDATA[
+
+  $(document).ready(function() {      
+    targets();
+  });
+  $(window).resize(targets);
+  function targets(){
+    if($(window).width() > 768){
+      $(".main-navbar [data-target]").each(function(i){
+        $(this).attr("data-target", $(this).attr("href"));
+      });
+    }else{
+      $("[data-target]").click(function(e){
+        e.preventDefault();
+        if (e.target !== this){
+          $(this).attr("data-target", "#");
+        }else{
+          $(this).attr("data-target", $(this).attr("href"));
+          window.location = $(this).attr("href");
+        }
+      });
+    }
+  }
+
+//]]>
+    </script>
+    <link rel="stylesheet" id="gforms_reset_css-css" href="https://www.lotame.com/wp-content/plugins/gravityforms/css/formreset.min.css?ver=1.9.19" type="text/css" media="all"/>
+    <link rel="stylesheet" id="gforms_formsmain_css-css" href="https://www.lotame.com/wp-content/plugins/gravityforms/css/formsmain.min.css?ver=1.9.19" type="text/css" media="all"/>
+    <link rel="stylesheet" id="gforms_ready_class_css-css" href="https://www.lotame.com/wp-content/plugins/gravityforms/css/readyclass.min.css?ver=1.9.19" type="text/css" media="all"/>
+    <link rel="stylesheet" id="gforms_browsers_css-css" href="https://www.lotame.com/wp-content/plugins/gravityforms/css/browsers.min.css?ver=1.9.19" type="text/css" media="all"/>
+    <script type="text/javascript">
+//<![CDATA[
+
+/* <![CDATA[ */
+var ajaxUtil = {"url":"https:\/\/www.lotame.com\/wp-admin\/admin-ajax.php","nonce":"7777db4d21"};
+/* ]]> */
+
+//]]>
+    </script>
+    <script type="text/javascript" src="https://www.lotame.com/wp-content/themes/lotame-base/dist/js/app.js">
+    </script>
+    <script type="text/javascript" src="https://www.lotame.com/wp-includes/js/wp-embed.min.js?ver=4.5.2">
+    </script>
+    <script type="text/javascript" src="https://www.lotame.com/wp-includes/js/jquery/jquery.js?ver=1.12.3">
+    </script>
+    <script type="text/javascript" src="https://www.lotame.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.0">
+    </script>
+    <script type="text/javascript" src="https://www.lotame.com/wp-content/plugins/gravityforms/js/placeholders.jquery.min.js?ver=1.9.19">
+    </script>
+    <iframe id="LOTCCFrameSun Jun 19 2016 20:44:28 GMT+0100 (BST)" src="https://bcp.crwdcntrl.net/5/c=891/rand=610690828/pv=y/rt=ifr" style="border: 0px; width: 0px; height: 0px; display: block;">
+    </iframe>
+  </body>
+</html>
+

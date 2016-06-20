@@ -1,0 +1,548 @@
+http://www.telegraph.co.uk/topics/about-us/3691972/Privacy-and-Cookie-Policy.html
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <!-- $Id: 404.html,v 1.15 2009/07/16 15:52:55 spencer Exp $ -->    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>
+      Telegraph | Error 404 | Sorry, the page you have requested is not available
+    </title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <base href="http://www.telegraph.co.uk/404/"/>
+    <meta name="tmgads.zone" content="error.404"/>
+    <meta name="tmgads.channel" content="error"/>
+    <meta name="tmgads.section" content="error-404"/>
+    <meta name="tmgads.pagetype" content="index"/>
+    <meta name="tmgads.level" content="1"/>
+    <meta name="tmgads.otherdata" content=""/>
+    <link rel="stylesheet" type="text/css" href="assets404/screen.css" media="screen"/>
+    <!--[if lte IE 6]>
+<link rel="stylesheet" type="text/css" href="assets404/ie6.css" media="screen" />
+<![endif]-->    <script type="text/javascript" src="assets404/js/jquery-1.5.min.js">
+    </script>
+    <script type="text/javascript" src="assets404/js/jquery.cookie.js">
+    </script>
+    <meta name="WT.errortype" content="/error/404/akamai"/>
+    <meta name="DCSext.Channel" content="error"/>
+    <meta name="WT.pi" content="error"/>
+    <meta name="DCSext.Category" content="404"/>
+    <meta name="DCSext.Content_Type" content="Index"/>
+    <meta name="DCSext.Level" content="1"/>
+    <meta name="DCSext.MLC" content="/error/404/akamai"/>
+    <meta name="DCS.dcssta" content="404"/>
+    <script src="assets404/js/webtrends/WTDcsVid.js" type="text/javascript">
+    </script>
+    <script language="javascript" type="text/javascript">
+//<![CDATA[
+
+	var wtenva = 'TEST';
+	var currUrl = document.URL;
+
+	if(currUrl.indexOf("http://www.telegraph") == 0){
+		wtenva = 'LIVE';
+	}
+
+	document.write("<script type='text/javascript' src='assets404/js/webtrends/"+wtenva+"/WTID.js'><\/sc" + "ript>");
+
+//]]>
+    </script>
+    <script type="text/javascript" src="assets404/js/webtrends/TEST/WTID.js">
+    </script>
+    <script src="assets404/js/webtrends/Webtrends.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <noscript>
+      
+	&lt;img alt="DCSIMG" id="DCSIMG" width="1" height="1" src="http://webtrends.telegraph.co.uk/dcsshgbi400000gscd62rrg43_4o2o/dcs.gif?&amp;dcsdat=1216212694328&amp;dcssip=www.telegraph.co.uk&amp;dcsuri=/news/efsehj.html&amp;WT.tz=1&amp;WT.bh=13&amp;WT.ul=en-US&amp;WT.cd=24&amp;WT.sr=1600x1200&amp;WT.jo=Yes&amp;WT.ti=Telegraph%20|%20Error%20404%20|%20Sorry,%20the%20page%20you%20have%20requested%20is%20not%20available&amp;WT.js=Yes&amp;WT.jv=1.5&amp;WT.bs=1555x1049&amp;WT.fi=Yes&amp;WT.fv=9.0&amp;WT.vt_f_tlv=1216206164&amp;WT.vt_f_tlh=1216207014&amp;WT.vt_f_s=1&amp;WT.vt_sid=195.152.249.11-1127520944.29920311.1216212694329&amp;WT.co_f=195.152.249.11-1127520944.29920311&amp;WT.pi=error&amp;MLC=/error/404&amp;Channel=error&amp;Category=404&amp;Content_Type=Index&amp;Level=1"/&gt;
+
+    </noscript>
+    <div id="tmglSite">
+      <script language="Javascript" type="text/javascript" src="assets404/js/dfp.js">
+      </script>
+      <div id="tmglBannerAd">
+        <div class="access">
+          Advertisement
+        </div>
+        <div class="adbanner" align="center">
+          <div id="banner">
+            <script type="text/javascript">
+//<![CDATA[
+
+				document.write(tmgAdsBuildAdTag("ban", "940x250,728x90,468x60", "adj", "", 2));
+			
+//]]>
+            </script>
+            <script type="text/javascript">
+//<![CDATA[
+tmgAds.performance[1] = {};tmgAds.performance[1].begin = tmgAdsTimer();
+//]]>
+            </script>
+            <div id="tmgAd_div_ban_1" style="margin:auto;padding:0px;width:940px">
+              <script type="text/javascript" id="tmgAd_script_ban_1" src="http://ad.doubleclick.net/N6582/adj/tmg.telegraph.error/error.404;at=ban;sc=error-404;pt=index;lvl=1;biw=1256;bih=605;fv=21;dnt=0;pos=1;aso=;dc_ref=http%3A%2F%2Fi.telegraph.co.uk%2F;div=tmgAd_div_ban_1;tile=1;sz=940x250,728x90,468x60;ord=1466365416814?">
+              </script>
+            </div>
+            <script type="text/javascript">
+//<![CDATA[
+tmgAds.performance[1].finish= tmgAdsTimer();tmgAds.performance[1].time  = tmgAds.performance[1].finish - tmgAds.performance[1].begin;tmgAds.performance.adTotal     += tmgAds.performance[1].time;tmgAds.performance.adAvg        = tmgAds.performance.adTotal/1;tmgAds.performance.adCount      = 1;
+//]]>
+            </script>
+          </div>
+        </div>
+      </div>
+      <div id="tmglHeader">
+        <div id="tmglTopBar">
+          <div id="tmglTopLeft">
+          </div>
+          <div id="tmglTopRight">
+            <p>
+              <script type="text/javascript">
+//<![CDATA[
+
+					var y = new Date();
+					var d = new Date()
+					var txt="Today\'s news";
+					var weekday=new Array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday")
+					var monthname=new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+					document.write(weekday[d.getDay()] + " ")
+					document.write(d.getDate() + " ")
+					document.write(monthname[d.getMonth()] + " ")
+					document.write(d.getFullYear())
+					
+//]]>
+              </script>
+              Sunday 19 June 2016
+
+				
+            </p>
+          </div>
+          <div class="cl">
+          </div>
+        </div>
+        <div id="tmglBrandSmall">
+          <a href="http://www.telegraph.co.uk/">
+            <div id="brand">
+              Telegraph.co.uk
+            </div>
+          </a>
+        </div>
+        <div class="cl">
+        </div>
+      </div>
+      <div id="tmglMenu">
+        <div id="tmglPriExWrap">
+          <div class="activeNav" id="tmglPrimaryNav">
+            <div class="access">
+              <a name="mainsections">
+              </a>
+            </div>
+            <ul class="mainNav">
+              <li class="first styleGeneric">
+                <a href="http://www.telegraph.co.uk/">
+                  Home
+                </a>
+              </li>
+              <li class="styleGeneric">
+                <a href="http://www.telegraph.co.uk/news/">
+                  News
+                </a>
+              </li>
+              <li class="styleGeneric">
+                <a href="http://www.telegraph.co.uk/sport/">
+                  Sport
+                </a>
+              </li>
+              <li class="styleGeneric">
+                <a href="http://www.telegraph.co.uk/finance/">
+                  Finance
+                </a>
+              </li>
+              <li class="styleGeneric">
+                <a href="http://www.telegraph.co.uk/lifestyle/">
+                  Lifestyle
+                </a>
+              </li>
+              <li class="styleGeneric">
+                <a href="http://www.telegraph.co.uk/comment/">
+                  Comment
+                </a>
+              </li>
+              <li class="styleGeneric">
+                <a href="http://www.telegraph.co.uk/travel/">
+                  Travel
+                </a>
+              </li>
+              <li class="styleGeneric">
+                <a href="http://www.telegraph.co.uk/culture/">
+                  Culture
+                </a>
+              </li>
+              <li class="styleGeneric">
+                <a href="http://www.telegraph.co.uk/technology/">
+                  Technology
+                </a>
+              </li>
+              <li class="styleGeneric">
+                <a href="http://fashion.telegraph.co.uk">
+                  Fashion
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div id="tmglExtraNav">
+            <ul class="extraNav">
+              <li class="first">
+                <a href="http://jobs.telegraph.co.uk/">
+                  Jobs
+                </a>
+              </li>
+              <li>
+                <a href="http://dating.telegraph.co.uk/s/a/4167?utm_source=tmg&amp;utm_medium=nav&amp;utm_campaign=dating">
+                  Dating
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/sponsored/offers/">
+                  Offers
+                </a>
+              </li>
+            </ul>
+            <div class="cl">
+            </div>
+          </div>
+          <div class="cl">
+          </div>
+        </div>
+      </div>
+      <div id="tmglBody">
+        <div class="error_body">
+          <div class="storyHead">
+            <h1>
+              Sorry
+            </h1>
+            <h2>
+              We cannot find the page you are looking for.
+            </h2>
+            <ul class="sidebars">
+              <li>
+                The page may have been moved, updated or deleted.
+              </li>
+              <li>
+                Or you may have typed the web address incorrectly. Please check the address and spelling.
+              </li>
+            </ul>
+          </div>
+          <div class="headererror">
+            <p>
+              Please also try the following:
+            </p>
+          </div>
+          <div class="storyHead">
+            <ul class="sidebars">
+              <li>
+                Use the 
+                <a href="http://www.telegraph.co.uk/atoz">
+                  A-Z index
+                </a>
+                ;
+              </li>
+              <li>
+                Use the navigation bar above or the list of options below.
+              </li>
+              <li>
+                If you still encounter problems, then please 
+                <a href="http://www.telegraph.co.uk/contactus">
+                  contact us
+                </a>
+                .
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="cl">
+      </div>
+      <div id="tmglFooterLarge">
+        <a href="http://www.telegraph.co.uk/" id="footerlogolink" title="Telegraph.co.uk: news, business, sport, the Daily Telegraph newspaper, Sunday Telegraph - Telegraph">
+        </a>
+        <div id="tmglFooterLargeItems">
+          <div class="footercolumn">
+            <ul>
+              <li class="itemfocus">
+                <a href="http://www.telegraph.co.uk/news/">
+                  News
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/news/uknews/">
+                  UK News
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/news/worldnews/">
+                  World News
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/news/obituaries/">
+                  Obituaries
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li class="itemfocus">
+                <a href="http://www.telegraph.co.uk/travel/">
+                  Travel
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li class="itemfocus">
+                <a href="http://jobs.telegraph.co.uk">
+                  Jobs
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="footercolumn">
+            <ul>
+              <li class="itemfocus">
+                <a href="http://www.telegraph.co.uk/sport/">
+                  Sport
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/sport/football/">
+                  Football
+                </a>
+              </li>
+              <li>
+                <a href="http://fantasyfootball.telegraph.co.uk/">
+                  Fantasy Football
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/sport/rugbyunion/">
+                  Rugby Union
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li class="itemfocus">
+                <a href="http://www.telegraph.co.uk/lifestyle/">
+                  Lifestyle
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li class="itemfocus">
+                <a href="http://dating.telegraph.co.uk/s/a/4168">
+                  Dating
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="footercolumn">
+            <ul>
+              <li class="itemfocus">
+                <a href="http://www.telegraph.co.uk/finance/">
+                  Finance
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/finance/personalfinance/">
+                  Personal Finance
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/finance/markets/">
+                  Markets
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/finance/economics/">
+                  Economics
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li class="itemfocus">
+                <a href="http://www.telegraph.co.uk/culture/">
+                  Culture
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li class="itemfocus">
+                <a href="http://www.clueduppuzzles.telegraph.co.uk">
+                  Crossword
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="footercolumn">
+            <ul>
+              <li class="itemfocus">
+                <a href="http://www.telegraph.co.uk/comment/">
+                  Comment
+                </a>
+              </li>
+              <li>
+                <a href="http://blogs.telegraph.co.uk/">
+                  Blogs
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/comment/letters/">
+                  Letters
+                </a>
+              </li>
+              <li>
+                <a href="http://my.telegraph.co.uk/">
+                  My Telegraph
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li class="itemfocus">
+                <a href="http://www.telegraph.co.uk/fashion/">
+                  Fashion
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li class="itemfocus">
+                <a href="http://www.telegraph.co.uk/sponsored/offers/">
+                  Offers
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="footercolumn">
+            <ul>
+              <li class="itemfocus">
+                <a href="http://www.telegraph.co.uk/contactus">
+                  Contact Us
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/topics/about-us/3691972/Privacy-and-Cookie-Policy.html">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/advertising">
+                  Advertise
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/atoz">
+                  A to Z
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a href="http://announcements.telegraph.co.uk/">
+                  Announcements
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.vivastreet.co.uk/">
+                  Marketplace
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/promotions/">
+                  Promotions
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div id="footercolumn_last">
+            <ul class="imgBulletList">
+              <li class="footrss">
+                <a href="http://www.telegraph.co.uk/rssfeeds/">
+                  RSS feeds
+                </a>
+              </li>
+              <li class="footwidgets">
+                <a href="http://www.telegraph.co.uk/widgets">
+                  Widgets
+                </a>
+              </li>
+              <li class="footmobile">
+                <a href="http://www.telegraph.co.uk/mobile">
+                  Mobile
+                </a>
+              </li>
+            </ul>
+            <ul class="ullast">
+              <li>
+                <a href="http://3276.e-printphoto.co.uk/dailytelegraph/">
+                  Reader prints
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/sponsored/3121158/Subscribe-and-save.html">
+                  Subscribe
+                </a>
+              </li>
+              <li>
+                <a href="http://www.telegraph.co.uk/topics/syndication-services/">
+                  Syndication
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="cl">
+          </div>
+        </div>
+        <!-- end of tmglFooterLargeItems div -->        <div id="footerinfo">
+          <p>
+            © Copyright of Telegraph Media Group Limited 
+            <script type="text/javascript">
+//<![CDATA[
+var y = new Date(); document.write(y.getFullYear());
+//]]>
+            </script>
+            2016
+          </p>
+          <p>
+            <a href="http://www.telegraph.co.uk/termsandconditions">
+              Terms and Conditions
+            </a>
+          </p>
+          <p>
+            <script type="text/javascript">
+//<![CDATA[
+document.write(txt.link("http://www.telegraph.co.uk/archive/" + (d.getFullYear()) + "-" + (d.getMonth() + 1) + "-" + (d.getDate()) + ".html"));
+//]]>
+            </script>
+            <a href="http://www.telegraph.co.uk/archive/2016-6-19.html">
+              Today's news
+            </a>
+          </p>
+          <p>
+            <a href="http://www.telegraph.co.uk/archive/">
+              Archive
+            </a>
+          </p>
+          <p>
+            <a href="http://www.telegraph.co.uk/news/1435295/Telegraph-Style-Book-Introduction.html">
+              Style Book
+            </a>
+          </p>
+          <p>
+            <a href="http://www.telegraph.co.uk/topics/weather/4142730/Weather.html">
+              Weather
+            </a>
+          </p>
+          <div class="cl">
+          </div>
+        </div>
+      </div>
+      <!-- end of tmglFooterLarge div -->    </div>
+  </body>
+</html>
+
