@@ -1,5 +1,6 @@
 package extractor;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -9,7 +10,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import com.gargoylesoftware.htmlunit.ScriptException;
+import db.Policy;
 
 /**
  * Extract the privacy policy of given website
@@ -21,7 +22,7 @@ public class PolicyExtractor {
 	private String url;
 	private String policyUrl;
 	private String policy;
-	private String whoisReport;
+	private WhoisResult whoisResult;
 	private WebDriver driver;
 
 	public enum Status {
@@ -34,12 +35,13 @@ public class PolicyExtractor {
 		this.url = url;
 		policyUrl = "";
 		policy = "";
-		whoisReport="";
+		whoisResult = new WhoisResult();
 		status = Status.FAIL;
 		DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
 		capabilities.setCapability("intl.accept_languages", "en-us");
 		driver = new HtmlUnitDriver(capabilities);
-		//driver=new FirefoxDriver(capabilities);
+		driver.manage().deleteAllCookies();
+		// driver=new FirefoxDriver(capabilities);
 
 	}
 
@@ -54,7 +56,7 @@ public class PolicyExtractor {
 		String href = "";
 		String[] terms = { "Privacy", "Privacy Policy" };
 		try {
-			System.out.println("Extracting: "+url);
+			System.out.println("Extracting: " + url);
 			driver.get(url);
 			Thread.sleep(5000);
 			for (int i = 0; i < terms.length; i++) {
@@ -66,33 +68,112 @@ public class PolicyExtractor {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			//driver.quit();
-			return "";
+			// driver.quit();
+			// return "";// unnecessary?
 		}
-		//driver.quit();
+		// driver.quit();
 		return href;
 	}
+
 	/**
-	 * Extract the privacy policy url and its content of given url, resutl status refer to {@link #getStatus()}
-	 * and get result from 
-	 * {@link #getPolicyUrl()} and 
-	 * {@link #getPoicy()}.
-	 * @throws InterruptedException 
+	 * Trivially search for link for privacy policy of driver's currently
+	 * visiting websites.
+	 * 
+	 * @param driver
+	 * @return link of privacy policy, null if not found
 	 */
-	public void extract() throws InterruptedException {
-		System.out.println("Visiting " + url);
-		policyUrl = getPolicyHref();
-		if (!policyUrl.equals("")) {
+	private String getPolicyHref(String url) {
+		String href = "";
+		String[] terms = { "Privacy", "Privacy Policy" };
+		try {
+			System.out.println("Extracting: " + url);
 			driver.get(url);
 			Thread.sleep(5000);
-			policy = driver.getPageSource();
-			status = Status.SUCCESS;
-		} else {
-			Whois whois = new Whois();
-			whoisReport = whois.getWhois(url);
-			if (!whoisReport.equals("")) {
-				status = Status.REFERTOWHOIS;
+			for (int i = 0; i < terms.length; i++) {
+				List<WebElement> list = driver.findElements(By.partialLinkText(terms[i]));
+				if (list.size() > 0) {
+					href = list.get(0).getAttribute("href");
+					break;
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// driver.quit();
+			return "";// unnecessary?
+		}
+		// driver.quit();
+		return href;
+	}
+
+	/**
+	 * Extract the privacy policy url and its content of given url, resutl
+	 * status refer to {@link #getStatus()} and get result from
+	 * {@link #getPolicyUrl()} and {@link #getPoicy()}.
+	 * 
+	 * @throws InterruptedException
+	 */
+	public void extract() {
+		System.out.println("Visiting " + url);
+		policyUrl = getPolicyHref();
+		try {
+			if (!"".equals(policyUrl)) {
+				driver.get(policyUrl);
+				Thread.sleep(5000);
+				policy = driver.getPageSource();
+				status = Status.SUCCESS;
+			} else {
+				Whois whois = new Whois();
+				if (whois.getWhois(url)) {
+					whoisResult = whois.getWhoisResult();
+					policyUrl = getPolicyHref("http://" + whoisResult.getRegistrantUrl());
+					if (!"".equals(policyUrl)) {
+						driver.get(policyUrl);
+						Thread.sleep(5000);
+						policy = driver.getPageSource();
+						status = Status.REFERTOWHOIS;
+					}
+				} else {
+					
+				}
+
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		driver.quit();
+
+	}
+
+	public void extractByFirefox() {
+		DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
+		capabilities.setCapability("intl.accept_languages", "en-us");
+		driver = new FirefoxDriver(capabilities);
+		driver.manage().deleteAllCookies();
+
+		System.out.println("Visiting " + url);
+		policyUrl = getPolicyHref();
+		try {
+			if (!"".equals(policyUrl)) {
+				driver.get(policyUrl);
+				Thread.sleep(5000);
+				policy = driver.getPageSource();
+				status = Status.SUCCESS;
+			} else {
+				Whois whois = new Whois();
+				if (whois.getWhois(url)) {
+					whoisResult = whois.getWhoisResult();
+					policyUrl = getPolicyHref("http://" + whoisResult.getRegistrantUrl());
+					if (!"".equals(policyUrl)) {
+						driver.get(policyUrl);
+						Thread.sleep(5000);
+						policy = driver.getPageSource();
+						status = Status.REFERTOWHOIS;
+					}
+				}
+
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		driver.quit();
 
@@ -100,6 +181,22 @@ public class PolicyExtractor {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		PolicyExtractor extractor = new PolicyExtractor("http://ebay.com");
+		extractor.extractByFirefox();
+		System.out.println(extractor.getPolicyUrl());
+		/*
+		 * extractor.extractByFirefox();
+		 * System.out.println(extractor.getStatus()); switch
+		 * (extractor.getStatus()) { case SUCCESS: System.out.println(
+		 * "Success: " + extractor.getPolicyUrl()); break; case REFERTOWHOIS:
+		 * System.out.println("WHOIS");
+		 * System.out.println(extractor.getWhoisResult().getRegistrantOrg() +
+		 * " " + extractor.getWhoisResult().getRegistrantUrl());
+		 * System.out.println(extractor.getPolicyUrl()); break; default:
+		 * System.out.println("Fail");
+		 * 
+		 * }
+		 */
 
 	}
 
@@ -126,8 +223,8 @@ public class PolicyExtractor {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-	
-	public String getWhoisReport(){
-		return whoisReport;
+
+	public WhoisResult getWhoisResult() {
+		return whoisResult;
 	}
 }

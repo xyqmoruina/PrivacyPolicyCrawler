@@ -27,170 +27,168 @@ import de.malkusch.whoisServerList.publicSuffixList.PublicSuffixListFactory;
  *
  */
 public class Whois {
-	private static final Pattern pattern = Pattern.compile("Whois Server:\\s(.*)"); // \\s
-																					// match
-																					// any
-																					// white
-																					// space
-																					// character.
-	private static Pattern patternRegistrar = Pattern.compile("URL:\\s(.*)");
-	private static Pattern patternRegistrar2 = Pattern.compile("");
+	private static final Pattern patternWhoisServer = Pattern.compile("Whois Server:\\s*(.*)");
+	private static final Pattern patternRegistrantOrg = Pattern.compile("Registrant Organization:\\s*(.*)");
+	private static final Pattern patternRegistrantUrl = Pattern.compile("Registrant Email:\\s*.*@(.*)");
+	private static final Pattern patternNoMatch = Pattern.compile("No match for ");
+
 	private Matcher matcher;
-	private static Map<String, String> host;
+	private WhoisResult whoisResult;
+	private static Map<String, String> hostList;
+	private static final PublicSuffixListFactory factory = new PublicSuffixListFactory();
+	private static final PublicSuffixList suffixList = factory.build();
 
-	// regex whois parser
-	private static final String WHOIS_SERVER_PATTERN = "";
-	private static final String WHOIS_REGISTRAR_PATTERN = "Registrar URL:\\s(.*)";
-
-	public Whois() {
-	}
-
-	/**
-	 * Construct with path to whois server list file.
-	 * 
-	 * @param path
-	 */
-	public Whois(String path) {
-		try (Stream<String> stream = Files.lines(Paths.get(Tld.class.getResource(path).toURI()))) {
+	public Whois(){
+		whoisResult=new WhoisResult();
+		String path="/whois_server_list.txt";
+		try (Stream<String> stream = Files.lines(Paths.get(Whois.class.getResource(path).getPath()))) {
 			List<Tld> tlds = new ArrayList<Tld>();
 			stream.forEach((record) -> {
-				String[] r = record.split(" ");
+				String[] r = record.split(" ");// format: tld host
 				tlds.add(new Tld(r[0], r[1]));
 			});
 
-			host = tlds.stream().collect(Collectors.toMap(Tld::getTld, Tld::getWhoisHost));
-			host.entrySet().stream().sorted((o1, o2) -> {
-				return getDomainLevels(o1.getKey()) - getDomainLevels(o2.getKey());
-			}).forEach(System.out::println);
+			hostList = tlds.stream().collect(Collectors.toMap(Tld::getTld, Tld::getWhoisHost));
+			// hostList.entrySet().stream().forEach(System.out::println);
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (URISyntaxException e) {
+			System.out.println("2121");
+		}
+	}
+	public Whois(String path) {
+		whoisResult = new WhoisResult();
+		System.out.println(path);
+		try (Stream<String> stream = Files.lines(Paths.get(path))) {
+			List<Tld> tlds = new ArrayList<Tld>();
+			stream.forEach((record) -> {
+				String[] r = record.split(" ");// format: tld host
+				tlds.add(new Tld(r[0], r[1]));
+			});
+
+			hostList = tlds.stream().collect(Collectors.toMap(Tld::getTld, Tld::getWhoisHost));
+			// hostList.entrySet().stream().forEach(System.out::println);
+
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("2121");
 		}
 	}
 
-	private String queryWithWhoisServer(String domainName, String whoisServer) {
+	private boolean findRegistrantOrg(String whoisReport) {
+		boolean flag = false;
 
-		String result = "";
-		WhoisClient whois = new WhoisClient();
-		try {
+		matcher = patternRegistrantOrg.matcher(whoisReport);
+		if (matcher.find()) {
+			this.whoisResult.setRegistrantOrg(matcher.group(1));
+			flag = true;
+		}
+		return flag;
+	}
 
-			whois.connect(whoisServer);
-			result = whois.query(domainName);
-			whois.disconnect();
+	private boolean findRgistrantUrl(String whoisReport) {
+		boolean flag = false;
 
-		} catch (SocketException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		matcher = patternRegistrantUrl.matcher(whoisReport);
+		if (matcher.find()) {
+			this.whoisResult.setRegistrantUrl(matcher.group(1));
+			flag = true;
 		}
 
-		return result;
-
+		return flag;
 	}
 
-	private int getDomainLevels(String url) {
+	private String findWhoisServer(String whoisReport) {
+		String server = "";
 
-		return url.split("\\.").length;
-	}
-
-	private String getHostByTld(String url) {
-		return host.get(extractTld(url));
-	}
-
-	public String getWhoisByShell(String url) {
-		Process p;
-		String result = "";
-		try {
-			p = Runtime.getRuntime().exec("whois " + url);
-			p.waitFor();
-			BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			result = br.lines().collect(Collectors.joining("\n"));
-		} catch (Exception e) {
-			e.printStackTrace();
+		matcher = patternWhoisServer.matcher(whoisReport);
+		// find last whois server
+		while (matcher.find()) {
+			server = matcher.group(1);
 		}
-		return result;
+
+		return server;
 	}
 
-	public String getWhois(String url) {
-		String result = "";
-
-		// parse as domainname.sld.tld
-		PublicSuffixListFactory factory = new PublicSuffixListFactory();
-		PublicSuffixList suffixList = factory.build();
-
-		result = getWhoisByShell(suffixList.getRegistrableDomain(url));
-		//System.out.println(result);
-		return result;
+	private boolean findNoMatch(String whoisReport) {
+		matcher = patternNoMatch.matcher(whoisReport);
+		return matcher.find();
 	}
 
-	public String getWhois(String url, String mainHost) {
-		String result = "";
+	/**
+	 * store
+	 * 
+	 * @param whoisReport
+	 * @return
+	 */
+	private boolean storeRegistrantInfo(String whoisReport) {
+		boolean flag = findRegistrantOrg(whoisReport) && findRgistrantUrl(whoisReport);
+
+		return flag;
+
+	}
+
+	public boolean getWhois(String url) {
+		boolean flag = false;
+		String registableUrl = suffixList.getRegistrableDomain(url);
+		String whoisReport = "";
 		WhoisClient client = new WhoisClient();
 		try {
-			client.connect(mainHost);
-			String whoisReport = client.query(url);
+			client.connect(WhoisClient.DEFAULT_HOST);
+			whoisReport = client.query("=" + registableUrl);
+			System.out.println(whoisReport);
+			if (!(flag = storeRegistrantInfo(whoisReport))) {
+				System.out.println("vvv");
+				String server = findWhoisServer(whoisReport);
+				String tempReport = "";
+				if (!"".equals(server)) {
+					// secondary search
+					System.out.println("sss");
+					client.connect(server);
+					tempReport = client.query(registableUrl);
+					if (!(flag = storeRegistrantInfo(tempReport))) {
+						client.connect(hostList.get(suffixList.getPublicSuffix(url)));
+						tempReport = client.query(registableUrl);
+					}
+				} else if (findNoMatch(whoisReport)) {
+					// refer to pre-define host
+					System.out.println("hhh");
+					client.connect(hostList.get(suffixList.getPublicSuffix(url)));
+					tempReport = client.query(registableUrl);
+
+				}
+				whoisReport += tempReport;
+				flag = storeRegistrantInfo(tempReport);
+
+			}
+			whoisResult.setWhoisReport(whoisReport);
 			client.disconnect();
 
-			result = whoisReport;
-			// Find the url of its registrar
-			/*
-			 * result = getRegistrarUrl(whoisReport);
-			 * System.out.println("!!!"+result); if (result.equals("")) { // get
-			 * the address of real whois server result =
-			 * getRegistrarUrl(queryWithWhoisServer(url,
-			 * getWhoisServer(whoisReport))); }
-			 */
 		} catch (SocketException e) {
+			System.err.println("Fail to connect whois server of: " + url);
 			e.printStackTrace();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		// System.out.println("****"+result);
-
-		return result;
+		return flag;
 	}
 
-	private String getWhoisServer(String whois) {
-
-		String result = "";
-
-		matcher = pattern.matcher(whois);
-
-		// get last whois server
-		while (matcher.find()) {
-			result = matcher.group(1);
-		}
-		return result;
+	public WhoisResult getWhoisResult() {
+		return whoisResult;
 	}
 
-	public String getRegistrarUrl(String whois) {
-		String result = "";
-		System.out.println("===\n" + whois);
-		matcher = patternRegistrar.matcher(whois);
-		if (matcher.find()) {
-			result = matcher.group(1);
-		}
-		return result;
-	}
-
-	public String extractTld(String url) {
-		String[] ss = url.split("\\.");
-
-		return ss[ss.length - 1];
-
-	}
-	
 	public static void main(String[] args) {
-		Whois whois = new Whois();
-		// Whois whois = new Whois("/whois_server_list.txt");
-		// System.out.println(whois.getWhoisByShell("bbci.co.uk"));
-		String url = "fdsafd.chartbeat.net";
-		whois.getWhois(url);
-		// System.out.println(whois.getWhois(url));
-
+		Whois whois = new Whois(Whois.class.getResource("/whois_server_list.txt").getPath());
+		if (whois.getWhois("https://fls-na.amazon.com")) {
+			WhoisResult result = whois.getWhoisResult();
+			System.out.println(
+					result.getWhoisReport() + "\n" + result.getRegistrantOrg() + " " + result.getRegistrantUrl());
+		} else {
+			System.out.println("ffffff");
+		}
 	}
 }

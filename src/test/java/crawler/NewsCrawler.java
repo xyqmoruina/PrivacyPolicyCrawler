@@ -3,7 +3,6 @@ package crawler;
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;
 import cn.edu.hfut.dmic.webcollector.model.Page;
 import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BreadthCrawler;
-import org.jsoup.nodes.Document;
 
 /**
  * Crawling news from hfut news

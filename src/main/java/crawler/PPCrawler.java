@@ -2,7 +2,6 @@ package crawler;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -14,6 +13,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,8 +31,6 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import com.fasterxml.jackson.core.JsonParseException;
-
 import cn.edu.hfut.dmic.webcollector.crawldb.DBManager;
 import cn.edu.hfut.dmic.webcollector.crawler.Crawler;
 import cn.edu.hfut.dmic.webcollector.fetcher.Executor;
@@ -49,6 +47,7 @@ import extractor.PolicyExtractor;
 import extractor.Tld;
 
 public class PPCrawler {
+	private static final int MAX_RETRY = 3;
 	private static MyLogger logger;
 	private MyDB db;
 	private int topN;
@@ -56,7 +55,7 @@ public class PPCrawler {
 	private int crawlingDepth;
 	private String crawlerDir;
 	private Map<String, String> host;
-	
+
 	static {
 		// turn off Selenium logging
 		Logger logger = Logger.getLogger("com.gargoylesoftware.htmlunit");
@@ -71,7 +70,7 @@ public class PPCrawler {
 		threads = 20;
 		crawlingDepth = 1;
 		getWhoisHost();
-		db=new MyDB();
+		db = new MyDB();
 	}
 
 	public PPCrawler(String crawlerDir, int topN, int threads, int crawlingDepth) {
@@ -81,7 +80,7 @@ public class PPCrawler {
 		this.threads = threads;
 		this.crawlingDepth = crawlingDepth;
 		getWhoisHost();
-		db=new MyDB();
+		db = new MyDB();
 	}
 
 	public int getCrawlingDepth() {
@@ -129,7 +128,7 @@ public class PPCrawler {
 		}
 	}
 
-	public void setNetworkMonitorProfile(FirefoxProfile profile, String harPath) throws IOException {
+	public void setNetworkMonitorProfile(FirefoxProfile profile, String harPath) {
 		// FirefoxProfile profile = new FirefoxProfile();
 
 		// Load extensions
@@ -137,7 +136,12 @@ public class PPCrawler {
 																											// path
 																											// as
 																											// needed
-		profile.addExtension(harExport);
+		try {
+			profile.addExtension(harExport);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Enable the automation without having a new HAR file created for every
 		// loaded page.
@@ -189,7 +193,7 @@ public class PPCrawler {
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 */
-	public List<String> findLinksByProxy(String url) throws IOException, URISyntaxException {
+	public List<String> findLinksByProxy(String url) {
 		List<String> links = new ArrayList<String>();
 		String binPath = "/Users/jero/codebase/project/libs/Firefox.app/Contents/MacOS/firefox";
 		String harPath = System.getProperty("user.dir") + "/" + PPCrawler.logger.getHarDir();
@@ -199,32 +203,25 @@ public class PPCrawler {
 		setNetworkMonitorProfile(profile, harPath);
 		WebDriver driver = new FirefoxDriver(Binary, profile);
 		driver.manage().deleteAllCookies();
-		
-		try {
-			Thread.sleep(5000); // allow firebug to load its net panel
-			driver.get(url);
-			Thread.sleep(20000); // while firebug is exporting HAR
-			List<HarEntry> entries = readHar(harPath);
-			for (HarEntry e : entries) {
-				links.add(extractDomain(e.getRequest().getUrl()));
-			}
-		/*} catch (NullPointerException ne) {
 
+		int retry = 0;
+		do {
 			try {
-				Thread.sleep(20000);
+				Thread.sleep(1500); // allow firebug to load its net panel
+				driver.get(url);
+				Thread.sleep(20000); // while firebug is exporting HAR
 				List<HarEntry> entries = readHar(harPath);
 				for (HarEntry e : entries) {
 					links.add(extractDomain(e.getRequest().getUrl()));
 				}
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}*/
-		} catch (InterruptedException ie) {
-			ie.printStackTrace();
-		}
+				retry = MAX_RETRY;
+			} catch (Exception ie) {
+				ie.printStackTrace();
+			} /*
+				 * finally { driver.quit(); }
+				 */
+		} while (retry++ < MAX_RETRY);
 		driver.quit();
-		
 		return links;
 
 	}
@@ -244,6 +241,7 @@ public class PPCrawler {
 
 	/**
 	 * Find all link in page source
+	 * 
 	 * @deprecated
 	 * @param url
 	 * @return
@@ -294,32 +292,32 @@ public class PPCrawler {
 		return null;
 	}
 
-
 	/**
 	 * 
 	 * @param url
 	 *            protocol://url
 	 * @throws Exception
 	 */
-	public void start(String url) throws Exception {
+	public void gatherByFirefox(String url) {
 		Executor executor = new Executor() {
 			public void execute(CrawlDatum datum, CrawlDatums next) throws Exception {
 				String currentUrl = datum.getUrl();
-				//System.out.println("***" + currentUrl);
+				// System.out.println("***" + currentUrl);
 				PolicyExtractor extractor = new PolicyExtractor(currentUrl);
-				extractor.extract();
-				String timestamp=LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-mm-dd-HH:MM:SS"));
+				extractor.extractByFirefox();
+				String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss"));
 				switch (extractor.getStatus()) {
 				case SUCCESS:
 					logger.toLog("hreflog.txt", currentUrl + " Success");
 					logger.toFile(URLEncoder.encode(currentUrl, "UTF-8") + ".txt",
 							extractor.getPolicyUrl() + "\n" + extractor.getPolicy());
-					//new Policy(mainsite, connectingUrl, policyurl,0, "",date.toString()
+					// new Policy(mainsite, connectingUrl, policyurl,0,
+					// "",date.toString()
 					db.insert(new Policy(url, currentUrl, extractor.getPolicyUrl(), 0, "", timestamp));
 					break;
 				case REFERTOWHOIS:
-					logger.toLog("hreflog.txt", currentUrl + " Refer to " + extractor.getWhoisReport());
-					db.insert(new Policy(url, currentUrl, "", 1, extractor.getWhoisReport(), timestamp));
+					//logger.toLog("hreflog.txt", currentUrl + " Refer to " + extractor.getWhoisReport());
+					//db.insert(new Policy(url, currentUrl, "", 1, extractor.getWhoisReport(), timestamp));
 					break;
 				default:
 					logger.toLog("hreflog.txt", currentUrl + " Fail");
@@ -338,15 +336,73 @@ public class PPCrawler {
 
 		crawler.addSeed(url);// add main site
 		List<String> links = findLinksByProxy(url);
+
 		for (String l : links) {
 			// System.out.println("Add: "+l);
 			logger.toLog("hreflog.txt", "Add: " + l);
 			crawler.addSeed(l);
 		}
 		logger.toLog("hreflog.txt", "Total: " + links.size());
-		crawler.start(1);
+		try {
+			crawler.start(1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
+	public void gather(String url) {
+		Executor executor = new Executor() {
+			public void execute(CrawlDatum datum, CrawlDatums next) throws Exception {
+				String currentUrl = datum.getUrl();
+				// System.out.println("***" + currentUrl);
+				PolicyExtractor extractor = new PolicyExtractor(currentUrl);
+				extractor.extract();
+				String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss"));
+				switch (extractor.getStatus()) {
+				case SUCCESS:
+					logger.toLog("hreflog.txt", currentUrl + " Success");
+					logger.toFile(URLEncoder.encode(currentUrl, "UTF-8") + ".txt",
+							extractor.getPolicyUrl() + "\n" + extractor.getPolicy());
+					// new Policy(mainsite, connectingUrl, policyurl,0,
+					// "",date.toString()
+					db.insert(new Policy(url, currentUrl, extractor.getPolicyUrl(), 0, "", timestamp));
+					break;
+				case REFERTOWHOIS:
+					logger.toLog("hreflog.txt", currentUrl + " Refer to " + extractor.getWhoisResult().getWhoisReport());
+					db.insert(new Policy(url, currentUrl, extractor.getPolicyUrl(), 1, extractor.getWhoisResult().getRegistrantUrl(), timestamp));
+					break;
+				default:
+					logger.toLog("hreflog.txt", currentUrl + " Fail");
+					db.insert(new Policy(url, currentUrl, "", 0, "", timestamp));
 
+				}
+
+			}
+		};
+
+		// create a BerkeleyDBManager
+		DBManager manager = new BerkeleyDBManager("crawl");
+		// creating a crawler object need DBManager and executor
+		Crawler crawler = new Crawler(manager, executor);
+		// String url = "http://www.bbc.co.uk";
+
+		crawler.addSeed(url);// add main site
+		List<String> links = findLinksByProxy(url);
+
+		for (String l : links) {
+			// System.out.println("Add: "+l);
+			logger.toLog("hreflog.txt", "Add: " + l);
+			crawler.addSeed(l);
+		}
+		logger.toLog("hreflog.txt", "Total: " + links.size());
+		try {
+			crawler.start(1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Read all har file under given path and return url in har entries
 	 * 
@@ -354,85 +410,61 @@ public class PPCrawler {
 	 * @return
 	 * @throws IOException
 	 */
-	public List<HarEntry> readHar(String path) throws IOException {
+	public List<HarEntry> readHar(String path) throws Exception {
 		System.out.println(path);
 		List<HarEntry> entry = null;
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(path))) {
 			for (Path s : stream) {
 				HarFileReader r = new HarFileReader();
 
-				try {
-					System.out.println("Reading " + s.getFileName());
-					HarLog log = r.readHarFile(s.toFile());
-					HarEntries entries = log.getEntries();
-					entry = entries.getEntries();
-					/*
-					 * int count = 1; for (HarEntry e : entry) {
-					 * System.out.println(count++ + " " +
-					 * e.getRequest().getUrl());
-					 * 
-					 * }
-					 */
-				} catch (JsonParseException e) {
-					e.printStackTrace();
-					System.err.println("Parsing error during test");
-				} catch (IOException e) {
-					e.printStackTrace();
-					System.err.println("IO exception during test");
-				}
+				// try {
+				System.out.println("Reading " + s.getFileName());
+				HarLog log = r.readHarFile(s.toFile());
+				HarEntries entries = log.getEntries();
+				entry = entries.getEntries();
+
+				/*
+				 * } catch (JsonParseException e) { e.printStackTrace();
+				 * System.err.println("Parsing error during test"); } catch
+				 * (IOException e) { e.printStackTrace(); System.err.println(
+				 * "IO exception during test!!!"); }
+				 */
 			}
-		} catch (DirectoryIteratorException ex) {
+		} catch (DirectoryIteratorException | IOException ex) {
 			// I/O error encounted during the iteration, the cause is an
-			// IOException
-			throw ex.getCause();
+
+			ex.printStackTrace();
 		}
 
 		return entry;
 	}
 
-	public String getWhois(String domainName) {
-
-		StringBuilder result = new StringBuilder("");
-
-		WhoisClient whois = new WhoisClient();
-		try {
-
-			// default is internic.net
-			whois.connect(WhoisClient.DEFAULT_HOST);
-			String whoisData1 = whois.query("=" + domainName);
-			result.append(whoisData1);
-			whois.disconnect();
-
-		} catch (SocketException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+	public static void main(String[] args) throws IOException {
+		List<String> filter = Arrays.asList("baidu.com", "taobao.com", "weibo.com", "qq.com", "sina.com.cn",
+				"hao123.com", "tmall.com", "sohu.com", "blogspot.com","linkedin.com","live.com");//last 3 require login
+		/**
+		 * blogspot.com enforce login before loading web page
+		 */
+		List<String> tldFilter = Arrays.asList("com");// only gathering .com
+		
+		List<String> list = Files.lines(Paths.get("top500.csv")).filter((record) -> {
+			String[] s = record.split("\\.");
+			return !filter.contains(record) && tldFilter.contains(s[s.length - 1]);// .com
+																					// websites
+																					// only
 		}
 
-		return result.toString();
+		).limit(20).collect(Collectors.toList());// first line is empty
+		list.stream().forEach((url) -> {
+			System.out.println(url);
+			PPCrawler ppc = new PPCrawler("links/" + url);
 
-	}
-
-	public static void main(String[] args) throws Exception {
-		PPCrawler ppc = new PPCrawler("links/telegraph");
-
-		ppc.start("http://telegraph.co.uk");
-		// System.out.println(ppc.extractDomain("http://ichef.bbci.co.uk/images/ic/272x153/p03ydncg.jpg"));
-		/*
-		 * System.out.println(LocalDateTime.now().format(DateTimeFormatter.
-		 * ofPattern("yyyy-MM-dd+HH:mm:ss"))); LocalDateTime now =
-		 * LocalDateTime.now();
-		 * System.out.println(System.getProperty("user.dir"));
-		 * ppc.findLinksByProxy("fds"); String str =
-		 * "www.bbc.com+2016-06-15+11-48-34.har"; String[] ss =
-		 * str.replace(".har", "").split("\\+"); for (String s : ss) {
-		 * System.out.println(s); // System.out.println(str.replace(".har",
-		 * "")); } String timestampStr = ss[ss.length - 2] + "+" + ss[ss.length
-		 * - 1]; DateTimeFormatter formatter =
-		 * DateTimeFormatter.ofPattern("yyyy-MM-dd+HH-mm-ss"); LocalDateTime
-		 * timestamp = LocalDateTime.parse(timestampStr, formatter);
-		 * System.out.println(now.isAfter(timestamp)); // ppc.readHar("1.har");
-		 */
+			ppc.gather("http://" + url);
+		});
+		
+		//PPCrawler ppc=new PPCrawler("links/"+"blogspot.com");
+		//ppc.gatherByFirefox("http://blogspot.com");
+		
 	}
 
 	public String getCrawlerDir() {
