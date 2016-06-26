@@ -1,4 +1,4 @@
-package extractor;
+package whois;
 
 import java.io.IOException;
 import java.net.SocketException;

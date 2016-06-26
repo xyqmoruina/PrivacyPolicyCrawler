@@ -44,7 +44,7 @@ import edu.umass.cs.benchlab.har.HarEntry;
 import edu.umass.cs.benchlab.har.HarLog;
 import edu.umass.cs.benchlab.har.tools.HarFileReader;
 import extractor.PolicyExtractor;
-import extractor.Tld;
+import whois.Tld;
 
 public class PPCrawler {
 	private static final int MAX_RETRY = 3;
@@ -239,41 +239,6 @@ public class PPCrawler {
 
 	}
 
-	/**
-	 * Find all link in page source
-	 * 
-	 * @deprecated
-	 * @param url
-	 * @return
-	 */
-	public List<String> findLinksByPageSource(String url) {
-		List<String> links = new ArrayList<String>();
-		HtmlUnitDriver driver = new HtmlUnitDriver();
-		DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
-		capabilities.setCapability("intl.accept_languages", "en-gb");
-		// String url = "http://www.bbc.com";
-
-		driver.get(url);
-		// list all the connecting websites
-		List<WebElement> list = driver.findElements(By.tagName("a"));
-		driver.quit();
-		String regex = url.replace("/", "\\/") + ".*";
-		for (WebElement e : list) {
-			String href = e.getAttribute("href");
-			System.out.print(href);
-			// TODO may not needed
-			if (href.matches(regex)) {
-				System.out.println(" Filter out");
-			} else {
-				System.out.println();
-				links.add(e.getAttribute("href"));
-			}
-		}
-
-		return links;
-
-	}
-
 	public String getPolicyByLinkText(WebDriver driver) {
 		String[] terms = { "Privacy", "Privacy Policy", "Terms and Condition" };
 
@@ -295,35 +260,37 @@ public class PPCrawler {
 	/**
 	 * 
 	 * @param url
-	 *            protocol://url
-	 * @throws Exception
+	 *            Format: http://www.example.com
+	 * @param ifFirefox
+	 *            whether using firefox(false by default)
 	 */
-	public void gatherByFirefox(String url) {
+	public void gather(String url, boolean ifFirefox) {
 		Executor executor = new Executor() {
 			public void execute(CrawlDatum datum, CrawlDatums next) throws Exception {
 				String currentUrl = datum.getUrl();
-				// System.out.println("***" + currentUrl);
-				PolicyExtractor extractor = new PolicyExtractor(currentUrl);
-				extractor.extractByFirefox();
+				PolicyExtractor extractor = new PolicyExtractor(ifFirefox);
+				extractor.extract(currentUrl);
 				String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss"));
 				switch (extractor.getStatus()) {
 				case SUCCESS:
 					logger.toLog("hreflog.txt", currentUrl + " Success");
 					logger.toFile(URLEncoder.encode(currentUrl, "UTF-8") + ".txt",
 							extractor.getPolicyUrl() + "\n" + extractor.getPolicy());
-					// new Policy(mainsite, connectingUrl, policyurl,0,
-					// "",date.toString()
-					db.insert(new Policy(url, currentUrl, extractor.getPolicyUrl(), 0, "", timestamp));
+					db.insert(new Policy(url, currentUrl, extractor.getPolicyUrl(), extractor.getPolicy(), 0, "",
+							timestamp));
 					break;
 				case REFERTOWHOIS:
-					//logger.toLog("hreflog.txt", currentUrl + " Refer to " + extractor.getWhoisReport());
-					//db.insert(new Policy(url, currentUrl, "", 1, extractor.getWhoisReport(), timestamp));
+					logger.toLog("hreflog.txt",
+							currentUrl + " Refer to " + extractor.getWhoisResult().getWhoisReport());
+					db.insert(new Policy(url, currentUrl, extractor.getPolicyUrl(), extractor.getPolicy(), 1,
+							extractor.getWhoisResult().getRegistrantUrl(), timestamp));
 					break;
 				default:
 					logger.toLog("hreflog.txt", currentUrl + " Fail");
-					db.insert(new Policy(url, currentUrl, "", 0, "", timestamp));
+					db.insert(new Policy(url, currentUrl, "", "", 0, "", timestamp));
 
 				}
+				extractor.quit();
 
 			}
 		};
@@ -350,59 +317,16 @@ public class PPCrawler {
 			e.printStackTrace();
 		}
 	}
-	
-	public void gather(String url) {
-		Executor executor = new Executor() {
-			public void execute(CrawlDatum datum, CrawlDatums next) throws Exception {
-				String currentUrl = datum.getUrl();
-				// System.out.println("***" + currentUrl);
-				PolicyExtractor extractor = new PolicyExtractor(currentUrl);
-				extractor.extract();
-				String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss"));
-				switch (extractor.getStatus()) {
-				case SUCCESS:
-					logger.toLog("hreflog.txt", currentUrl + " Success");
-					logger.toFile(URLEncoder.encode(currentUrl, "UTF-8") + ".txt",
-							extractor.getPolicyUrl() + "\n" + extractor.getPolicy());
-					// new Policy(mainsite, connectingUrl, policyurl,0,
-					// "",date.toString()
-					db.insert(new Policy(url, currentUrl, extractor.getPolicyUrl(), 0, "", timestamp));
-					break;
-				case REFERTOWHOIS:
-					logger.toLog("hreflog.txt", currentUrl + " Refer to " + extractor.getWhoisResult().getWhoisReport());
-					db.insert(new Policy(url, currentUrl, extractor.getPolicyUrl(), 1, extractor.getWhoisResult().getRegistrantUrl(), timestamp));
-					break;
-				default:
-					logger.toLog("hreflog.txt", currentUrl + " Fail");
-					db.insert(new Policy(url, currentUrl, "", 0, "", timestamp));
 
-				}
+	/**
+	 * 
+	 * @param url
+	 * @param ifFirefox
+	 */
+	public void gatherFail(String url, boolean ifFirefox) {
 
-			}
-		};
-
-		// create a BerkeleyDBManager
-		DBManager manager = new BerkeleyDBManager("crawl");
-		// creating a crawler object need DBManager and executor
-		Crawler crawler = new Crawler(manager, executor);
-		// String url = "http://www.bbc.co.uk";
-
-		crawler.addSeed(url);// add main site
-		List<String> links = findLinksByProxy(url);
-
-		for (String l : links) {
-			// System.out.println("Add: "+l);
-			logger.toLog("hreflog.txt", "Add: " + l);
-			crawler.addSeed(l);
-		}
-		logger.toLog("hreflog.txt", "Total: " + links.size());
-		try {
-			crawler.start(1);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
+
 	/**
 	 * Read all har file under given path and return url in har entries
 	 * 
@@ -411,14 +335,14 @@ public class PPCrawler {
 	 * @throws IOException
 	 */
 	public List<HarEntry> readHar(String path) throws Exception {
-		System.out.println(path);
+		// System.out.println(path);
 		List<HarEntry> entry = null;
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(path))) {
 			for (Path s : stream) {
 				HarFileReader r = new HarFileReader();
 
 				// try {
-				System.out.println("Reading " + s.getFileName());
+				// System.out.println("Reading " + s.getFileName());
 				HarLog log = r.readHarFile(s.toFile());
 				HarEntries entries = log.getEntries();
 				entry = entries.getEntries();
@@ -440,13 +364,15 @@ public class PPCrawler {
 	}
 
 	public static void main(String[] args) throws IOException {
-		List<String> filter = Arrays.asList("baidu.com", "taobao.com", "weibo.com", "qq.com", "sina.com.cn",
-				"hao123.com", "tmall.com", "sohu.com", "blogspot.com","linkedin.com","live.com");//last 3 require login
-		/**
-		 * blogspot.com enforce login before loading web page
-		 */
+
+		List<String> filter = new ArrayList<String>();
+		// non English
+		Arrays.asList("baidu.com", "taobao.com", "weibo.com", "qq.com", "sina.com.cn", "hao123.com", "tmall.com",
+				"sohu.com", "naver.com", "xvideos.com").stream().forEach(url -> filter.add(url));
+		// require login
+		Arrays.asList("blogspot.com", "linkedin.com", "live.com", "vk.com").stream().forEach(url -> filter.add(url));
+
 		List<String> tldFilter = Arrays.asList("com");// only gathering .com
-		
 		List<String> list = Files.lines(Paths.get("top500.csv")).filter((record) -> {
 			String[] s = record.split("\\.");
 			return !filter.contains(record) && tldFilter.contains(s[s.length - 1]);// .com
@@ -455,16 +381,17 @@ public class PPCrawler {
 		}
 
 		).limit(20).collect(Collectors.toList());// first line is empty
+
 		list.stream().forEach((url) -> {
 			System.out.println(url);
-			PPCrawler ppc = new PPCrawler("links/" + url);
 
-			ppc.gather("http://" + url);
+			PPCrawler ppc = new PPCrawler("links/" + url);
+			ppc.gather("http://" + url, true);
 		});
-		
-		//PPCrawler ppc=new PPCrawler("links/"+"blogspot.com");
-		//ppc.gatherByFirefox("http://blogspot.com");
-		
+
+		//PPCrawler ppc = new PPCrawler("links/" + "youtube.com");
+		//ppc.gather("http://youtube.com", true);
+
 	}
 
 	public String getCrawlerDir() {

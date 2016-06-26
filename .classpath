@@ -43,10 +43,10 @@
 	<classpathentry kind="lib" path="lib/webcollector-2.31-bin/mongo-java-driver-3.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/webcollector-2.31-bin/slf4j-api-1.7.9.jar"/>
 	<classpathentry kind="lib" path="lib/webcollector-2.31-bin/slf4j-log4j12-1.7.9.jar"/>
-	<classpathentry kind="lib" path="lib/boilerpipe-javadoc-1.2.0.jar"/>
-	<classpathentry kind="lib" path="lib/boilerpipe-sources-1.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/harlib-jackson-1.1.3.jar"/>
-	<classpathentry kind="lib" path="lib/nekohtml-1.9.13.jar"/>
-	<classpathentry kind="lib" path="lib/xerces-2.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/boilerpipe-javadoc-1.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/boilerpipe-1.2.0src/boilerpipe-1.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/boilerpipe-1.2.0src/lib/nekohtml-1.9.13.jar"/>
+	<classpathentry kind="lib" path="lib/boilerpipe-1.2.0src/lib/xerces-2.9.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -205,6 +205,7 @@ tz whois.tznic.or.tz
 ua whois.ua
 ug whois.co.ug
 uk whois.nic.uk
+co.uk whois.nic.uk
 uk.com whois.centralnic.com
 uk.net whois.centralnic.com
 ac.uk whois.ja.net
