@@ -239,24 +239,6 @@ public class PPCrawler {
 
 	}
 
-	public String getPolicyByLinkText(WebDriver driver) {
-		String[] terms = { "Privacy", "Privacy Policy", "Terms and Condition" };
-
-		try {
-			for (int i = 0; i < terms.length; i++) {
-				List<WebElement> list = driver.findElements(By.partialLinkText(terms[i]));
-				if (list.size() > 0) {
-					return list.get(0).getAttribute("href");
-				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-		return null;
-	}
-
 	/**
 	 * 
 	 * @param url
@@ -319,15 +301,6 @@ public class PPCrawler {
 	}
 
 	/**
-	 * 
-	 * @param url
-	 * @param ifFirefox
-	 */
-	public void gatherFail(String url, boolean ifFirefox) {
-
-	}
-
-	/**
 	 * Read all har file under given path and return url in har entries
 	 * 
 	 * @param path
@@ -347,16 +320,9 @@ public class PPCrawler {
 				HarEntries entries = log.getEntries();
 				entry = entries.getEntries();
 
-				/*
-				 * } catch (JsonParseException e) { e.printStackTrace();
-				 * System.err.println("Parsing error during test"); } catch
-				 * (IOException e) { e.printStackTrace(); System.err.println(
-				 * "IO exception during test!!!"); }
-				 */
 			}
 		} catch (DirectoryIteratorException | IOException ex) {
 			// I/O error encounted during the iteration, the cause is an
-
 			ex.printStackTrace();
 		}
 

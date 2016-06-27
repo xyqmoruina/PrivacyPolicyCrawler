@@ -23,6 +23,10 @@
 	<select id="getFailed" parameterType="int" resultMap="result">
 		select * from policies where id>=#{id} and policyUrl='';
 	</select>
+	
+	<select id="selectById" parameterType="int" resultMap="result">
+		select * from policies where id>=#{id};
+	</select>
 	<update id="updatePolicyUrlById" >
 		update policies set policyUrl=#{policyUrl} policy=#{policy} where id=#{id};
 	</update>
