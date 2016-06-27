@@ -331,28 +331,30 @@ public class PPCrawler {
 
 	public static void main(String[] args) throws IOException {
 
-		List<String> filter = new ArrayList<String>();
-		// non English
-		Arrays.asList("baidu.com", "taobao.com", "weibo.com", "qq.com", "sina.com.cn", "hao123.com", "tmall.com",
-				"sohu.com", "naver.com", "xvideos.com").stream().forEach(url -> filter.add(url));
-		// require login
-		Arrays.asList("blogspot.com", "linkedin.com", "live.com", "vk.com").stream().forEach(url -> filter.add(url));
-
-		List<String> tldFilter = Arrays.asList("com");// only gathering .com
-		List<String> list = Files.lines(Paths.get("top500.csv")).filter((record) -> {
-			String[] s = record.split("\\.");
-			return !filter.contains(record) && tldFilter.contains(s[s.length - 1]);// .com
-																					// websites
-																					// only
-		}
-
-		).limit(20).collect(Collectors.toList());// first line is empty
-
+//		List<String> filter = new ArrayList<String>();
+//		// non English
+//		Arrays.asList("baidu.com", "taobao.com", "weibo.com", "qq.com", "sina.com.cn", "hao123.com", "tmall.com",
+//				"sohu.com", "naver.com", "fc2.com","jd.com","alibaba.com","soso.com","xinhuanet.com").stream().forEach(url -> filter.add(url));
+//		// adult content
+//		Arrays.asList("xvideos.com","pornhub.com", "xhamster.com").stream().forEach(url->filter.add(url));
+//		// require login
+//		Arrays.asList("blogspot.com", "linkedin.com", "live.com", "vk.com", "blogger.com").stream().forEach(url -> filter.add(url));
+//
+//		List<String> tldFilter = Arrays.asList("com");// only gathering .com
+//		List<String> list = Files.lines(Paths.get("top500.csv")).filter((record) -> {
+//			String[] s = record.split("\\.");
+//			return !filter.contains(record) && tldFilter.contains(s[s.length - 1]);// .com
+//																					// websites
+//																					// only
+//		}
+//
+//		).limit(500).collect(Collectors.toList());// first line is empty
+		List<String> list=Files.lines(Paths.get(PPCrawler.class.getResource("/list.txt").getPath())).collect(Collectors.toList());
 		list.stream().forEach((url) -> {
 			System.out.println(url);
 
-			PPCrawler ppc = new PPCrawler("links/" + url);
-			ppc.gather("http://" + url, true);
+			//PPCrawler ppc = new PPCrawler("links/" + url);
+			//ppc.gather("http://" + url, true);
 		});
 
 		//PPCrawler ppc = new PPCrawler("links/" + "youtube.com");
