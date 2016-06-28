@@ -38,13 +38,12 @@ public class Crawler {
 		SqlSessionFactory factory = builder.build(Crawler.class.getResourceAsStream("/mybatis/mybatis-config.xml"));// rely
 																													// on
 																													// mybatis
-
-		// Executor executor = Executors.newFixedThreadPool(20);
-		ExecutorService executor = Executors.newFixedThreadPool(20);
+		//ExecutorService executor = Executors.newFixedThreadPool(20);
+		ExecutorService executor=Executors.newWorkStealingPool();
 		List<Future<?>> future =new ArrayList<Future<?>>();
 		List<Policy> list;
 		try (SqlSession session = factory.openSession()) {
-			list = session.selectList("Policy.getFailed", 1644);
+			list = session.selectList("Policy.getFailed", 1);
 			session.commit();
 		}
 		int c = 0;

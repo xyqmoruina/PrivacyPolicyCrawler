@@ -146,12 +146,12 @@ public class Whois {
 			whoisReport = client.query("=" + registableUrl);
 			// System.out.println(whoisReport);
 			if (!(flag = storeRegistrantInfo(whoisReport))) {
-				System.out.println("vvv");
+				//System.out.println("vvv");
 				String server = findWhoisServer(whoisReport);
 				String tempReport = "";
 				if (!"".equals(server)) {
 					// secondary search
-					System.out.println("sss");
+					//System.out.println("sss");
 					client.connect(server);
 					tempReport = client.query(registableUrl);
 					// System.out.println(tempReport);
@@ -161,7 +161,7 @@ public class Whois {
 					}
 				} else if (findNoMatch(whoisReport)) {
 					// refer to pre-define host
-					System.out.println("hhh");
+					//System.out.println("hhh");
 					client.connect(hostList.get(parser.getTld(url)));
 					tempReport = client.query(registableUrl);
 

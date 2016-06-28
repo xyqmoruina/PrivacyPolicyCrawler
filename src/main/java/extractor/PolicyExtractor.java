@@ -127,7 +127,10 @@ public class PolicyExtractor {
 		//driver.quit();
 
 	}
-
+	
+	/**
+	 * Quit driver
+	 */
 	public void quit() {
 		driver.quit();
 	}

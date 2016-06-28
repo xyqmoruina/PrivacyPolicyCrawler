@@ -28,7 +28,7 @@
 		select * from policies where id>=#{id};
 	</select>
 	<update id="updatePolicyUrlById" >
-		update policies set policyUrl=#{policyUrl} policy=#{policy} where id=#{id};
+		update policies set policyUrl=#{policyUrl}, policy=#{policy} where id=#{id};
 	</update>
 	<!-- 
 	<select id="getById" parameterType="int" resultMap="result">

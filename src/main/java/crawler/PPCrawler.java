@@ -2,6 +2,7 @@ package crawler;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -16,10 +17,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.net.whois.WhoisClient;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
@@ -293,6 +300,7 @@ public class PPCrawler {
 		}
 		logger.toLog("hreflog.txt", "Total: " + links.size());
 		try {
+			crawler.setThreads(30);
 			crawler.start(1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -329,36 +337,118 @@ public class PPCrawler {
 		return entry;
 	}
 
+	private void storeResult(String mainUrl, String connectingUrl, PolicyExtractor extractor) {
+		String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss"));
+		switch (extractor.getStatus()) {
+		case SUCCESS:
+			logger.toLog("hreflog.txt", connectingUrl + " Success");
+			try {
+				logger.toFile(URLEncoder.encode(connectingUrl, "UTF-8") + ".txt",
+						extractor.getPolicyUrl() + "\n" + extractor.getPolicy());
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			db.insert(new Policy(mainUrl, connectingUrl, extractor.getPolicyUrl(), extractor.getPolicy(), 0, "",
+					timestamp));
+			break;
+		case REFERTOWHOIS:
+			logger.toLog("hreflog.txt", connectingUrl + " Refer to " + extractor.getWhoisResult().getWhoisReport());
+			db.insert(new Policy(mainUrl, connectingUrl, extractor.getPolicyUrl(), extractor.getPolicy(), 1,
+					extractor.getWhoisResult().getRegistrantUrl(), timestamp));
+			break;
+		default:
+			logger.toLog("hreflog.txt", connectingUrl + " Fail");
+			db.insert(new Policy(mainUrl, connectingUrl, "", "", 0, "", timestamp));
+
+		}
+	}
+
+	public void gathering(String url, int nThreads) {
+		//ExecutorService es = Executors.newFixedThreadPool(nThreads);
+		 ExecutorService es = Executors.newWorkStealingPool();
+
+		List<Future<?>> future = new ArrayList<Future<?>>();
+
+		// for (String url : urls) {
+		List<String> links = findLinksByProxy(url);// new browser
+		for (String link : links) {
+			Runnable task = () -> {
+				// new browser dedicates to one mainUrl
+				PolicyExtractor extractor = new PolicyExtractor(true);
+
+				extractor.extract(link);
+
+				storeResult(url, link, extractor);
+
+				extractor.quit();
+			};
+			future.add(es.submit(task));
+		}
+		// wait for all task complete
+		for (Future<?> f : future) {
+			try {
+				f.get();
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		// Attemp to shutdown
+		try {
+			System.out.println("attempt to shutdown executor");
+			es.shutdown();
+			es.awaitTermination(5, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			System.err.println("tasks interrupted");
+		} finally {
+			if (!es.isTerminated()) {
+				System.err.println("cancel non-finished tasks");
+			}
+			es.shutdownNow();
+			System.out.println("shutdown finished");
+		}
+	}
+
 	public static void main(String[] args) throws IOException {
 
-//		List<String> filter = new ArrayList<String>();
-//		// non English
-//		Arrays.asList("baidu.com", "taobao.com", "weibo.com", "qq.com", "sina.com.cn", "hao123.com", "tmall.com",
-//				"sohu.com", "naver.com", "fc2.com","jd.com","alibaba.com","soso.com","xinhuanet.com").stream().forEach(url -> filter.add(url));
-//		// adult content
-//		Arrays.asList("xvideos.com","pornhub.com", "xhamster.com").stream().forEach(url->filter.add(url));
-//		// require login
-//		Arrays.asList("blogspot.com", "linkedin.com", "live.com", "vk.com", "blogger.com").stream().forEach(url -> filter.add(url));
-//
-//		List<String> tldFilter = Arrays.asList("com");// only gathering .com
-//		List<String> list = Files.lines(Paths.get("top500.csv")).filter((record) -> {
-//			String[] s = record.split("\\.");
-//			return !filter.contains(record) && tldFilter.contains(s[s.length - 1]);// .com
-//																					// websites
-//																					// only
-//		}
-//
-//		).limit(500).collect(Collectors.toList());// first line is empty
-		List<String> list=Files.lines(Paths.get(PPCrawler.class.getResource("/list.txt").getPath())).collect(Collectors.toList());
+		// List<String> filter = new ArrayList<String>();
+		// // non English
+		// Arrays.asList("baidu.com", "taobao.com", "weibo.com", "qq.com",
+		// "sina.com.cn", "hao123.com", "tmall.com",
+		// "sohu.com", "naver.com",
+		// "fc2.com","jd.com","alibaba.com","soso.com","xinhuanet.com").stream().forEach(url
+		// -> filter.add(url));
+		// // adult content
+		// Arrays.asList("xvideos.com","pornhub.com",
+		// "xhamster.com").stream().forEach(url->filter.add(url));
+		// // require login
+		// Arrays.asList("blogspot.com", "linkedin.com", "live.com", "vk.com",
+		// "blogger.com").stream().forEach(url -> filter.add(url));
+		//
+		// List<String> tldFilter = Arrays.asList("com");// only gathering .com
+		// List<String> list =
+		// Files.lines(Paths.get("top500.csv")).filter((record) -> {
+		// String[] s = record.split("\\.");
+		// return !filter.contains(record) && tldFilter.contains(s[s.length -
+		// 1]);// .com
+		// // websites
+		// // only
+		// }
+		//
+		// ).limit(500).collect(Collectors.toList());// first line is empty
+		List<String> list = Files.lines(Paths.get(PPCrawler.class.getResource("/list.txt").getPath())).limit(20)
+				.collect(Collectors.toList());
 		list.stream().forEach((url) -> {
 			System.out.println(url);
 
-			//PPCrawler ppc = new PPCrawler("links/" + url);
-			//ppc.gather("http://" + url, true);
+			PPCrawler ppc = new PPCrawler("links/" + url);
+			 ppc.gather("http://" + url, true);
+			//ppc.gathering("http://" + url, 20);
 		});
 
-		//PPCrawler ppc = new PPCrawler("links/" + "youtube.com");
-		//ppc.gather("http://youtube.com", true);
+		// PPCrawler ppc = new PPCrawler("links/" + "youtube.com");
+		// ppc.gather("http://youtube.com", true);
 
 	}
 
