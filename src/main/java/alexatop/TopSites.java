@@ -165,8 +165,8 @@ public class TopSites {
 //                               "SECRET_ACCESS_KEY [COUNTRY_CODE]");
 //            System.exit(-1);
 //        }
-        String accessKey = "AKIAJGGSEUEXNSHBFN4Q";
-        String secretKey = "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";
+        String accessKey ="";
+        String secretKey = "";
         String countryCode = "US";
 
         TopSites topSites = new TopSites(accessKey, secretKey, countryCode);
