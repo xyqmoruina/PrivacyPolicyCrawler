@@ -43,4 +43,15 @@ public class MyDB {
 		
 		return list;
 	}
+	
+	public List<DistinctPolicy> getAllDistinctPolicy(){
+		List<DistinctPolicy> list =new ArrayList<DistinctPolicy>();
+		
+		try (SqlSession session = factory.openSession()) {
+			list = session.selectList("Policy.getAllDistinctPolicy");
+			session.commit();
+		}
+		
+		return list;
+	}
 }

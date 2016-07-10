@@ -6,6 +6,7 @@
 
 	<typeAliases>
 	  <typeAlias alias="Policy" type="db.Policy"/>
+	  <typeAlias alias="DPolicy" type="db.DistinctPolicy"/>
 	</typeAliases>
    <environments default = "development">
       <environment id = "development">

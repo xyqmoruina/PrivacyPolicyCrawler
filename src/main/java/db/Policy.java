@@ -26,10 +26,8 @@ public class Policy {
 		this.setIfByWhois(ifByWhois);
 		this.setWhoisRecord(whoisRecord);
 	}
-
 	public Policy() {
 	}
-
 	public int getId() {
 		return id;
 	}

@@ -191,7 +191,7 @@ public class Whois {
 
 	public static void main(String[] args) {
 		Whois whois = new Whois(Whois.class.getResource("/whois_server_list.txt").getPath());
-		if (whois.getWhois("https://yt3.ggpht.com")) {
+		if (whois.getWhois("https://beacon.krxd.net/")) {
 			WhoisResult result = whois.getWhoisResult();
 			System.out.println(
 					result.getWhoisReport() + "\n" + result.getRegistrantOrg() + " " + result.getRegistrantUrl());

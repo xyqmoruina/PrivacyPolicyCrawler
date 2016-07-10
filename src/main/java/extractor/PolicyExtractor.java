@@ -1,14 +1,17 @@
 package extractor;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import whois.DomainParser;
 import whois.Whois;
 import whois.WhoisResult;
 
@@ -22,23 +25,24 @@ public class PolicyExtractor {
 	private String policyUrl;
 	private String policy;
 	private WhoisResult whoisResult;
+	private ExtractResult extractResult;
 	private WebDriver driver;
-	
+	private final DomainParser parser=new DomainParser();
 
-	public enum Status {
-		SUCCESS, FAIL, REFERTOWHOIS, RESET
-	};
+//	public enum Status {
+//		SUCCESS, FAIL, REFERTOWHOIS, RESET
+//	};
 
-	private Status status;
+	private ExtractResult.Status status;
 
 	public PolicyExtractor() {
 		policyUrl = "";
 		policy = "";
 		whoisResult = new WhoisResult();
-		status = Status.FAIL;
+		status = ExtractResult.Status.FAIL;
+		extractResult=new ExtractResult();
 		DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
 		capabilities.setCapability("intl.accept_languages", "en-us");
-
 		driver= new HtmlUnitDriver(capabilities);
 		driver.manage().deleteAllCookies();
 		// driver=new FirefoxDriver(capabilities);
@@ -48,18 +52,21 @@ public class PolicyExtractor {
 		policyUrl = "";
 		policy = "";
 		whoisResult = new WhoisResult();
-		status = Status.FAIL;
-		DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
-		capabilities.setCapability("intl.accept_languages", "en-us");
+		status = ExtractResult.Status.FAIL;
+		extractResult=new ExtractResult();
+		
 		if(ifFirefox){
+			DesiredCapabilities capabilities=DesiredCapabilities.firefox();
+			capabilities.setCapability("intl.accept_languages", "en-us");
 			driver = new FirefoxDriver(capabilities);
 		}
 		else{
+			DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
+			capabilities.setCapability("intl.accept_languages", "en-us");
 			driver= new HtmlUnitDriver(capabilities);
 		}
 		driver.manage().deleteAllCookies();
-		// driver=new FirefoxDriver(capabilities);
-
+		
 	}
 
 	/**
@@ -71,11 +78,12 @@ public class PolicyExtractor {
 	 */
 	private String getPolicyHref(String url) {
 		String href = "";
-		String[] terms = { "Privacy", "Privacy Policy" };
+		String[] terms = { "Privacy", "Privacy Policy","privacy" };
+		driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);//wait 15s for server to response
 		try {
 			System.out.println("Extracting: " + url);
 			driver.get(url);
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 			for (int i = 0; i < terms.length; i++) {
 				List<WebElement> list = driver.findElements(By.partialLinkText(terms[i]));
 				if (list.size() > 0) {
@@ -83,8 +91,12 @@ public class PolicyExtractor {
 					break;
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		}catch(TimeoutException te){ 
+			System.err.println("Server not response");
+		}
+		catch (Exception e) {
+			System.err.println("Unkown error");
+			//e.printStackTrace();
 			// driver.quit();
 			// return "";// unnecessary?
 		}
@@ -101,27 +113,35 @@ public class PolicyExtractor {
 	public void extract(String url) {
 		driver.manage().deleteAllCookies();
 		policyUrl = getPolicyHref(url);
+		
 		try {
 			if (!"".equals(policyUrl)) {
+				//disable page load timeout
+				driver.manage().timeouts().pageLoadTimeout(-1, TimeUnit.SECONDS);
 				driver.get(policyUrl);
 				Thread.sleep(5000);
 				policy = driver.getPageSource();
-				status = Status.SUCCESS;
+				status = ExtractResult.Status.SUCCESS;
 			} else {
 				Whois whois = new Whois();
 				if (whois.getWhois(url)) {
+					status = ExtractResult.Status.REFERTOWHOIS;
 					whoisResult = whois.getWhoisResult();
 					policyUrl = getPolicyHref("http://" + whoisResult.getRegistrantUrl());
 					if (!"".equals(policyUrl)) {
+						//disable page load timeout
+						driver.manage().timeouts().pageLoadTimeout(-1, TimeUnit.SECONDS);
 						driver.get(policyUrl);
 						Thread.sleep(5000);
 						policy = driver.getPageSource();
-						status = Status.REFERTOWHOIS;
 					}
 				}
 
 			}
-		} catch (InterruptedException e) {
+		}catch(TimeoutException te){ 
+			te.printStackTrace();
+		}
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		//driver.quit();
@@ -138,9 +158,11 @@ public class PolicyExtractor {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		PolicyExtractor extractor = new PolicyExtractor(true);
-		extractor.extract("https://yt3.ggpht.com");
-		System.out.println(extractor.getPolicyUrl() + "\n" + extractor.getStatus() + "\n"
-				+ extractor.getPolicy());
+		extractor.extract("http://craigslist.org");
+//		System.out.println(extractor.getPolicyUrl() + "\n" + extractor.getStatus() + "\n"
+//				+ extractor.getPolicy());
+		ExtractResult result=extractor.getExtractResult();
+		System.out.println(result.getPolicyUrl()+"\t"+result.getStatus()+"\t"+result.getPolicy());
 		extractor.quit();
 	}
 
@@ -160,15 +182,27 @@ public class PolicyExtractor {
 		this.policy = policy;
 	}
 
-	public Status getStatus() {
-		return status;
-	}
-
-	public void setStatus(Status status) {
-		this.status = status;
-	}
+//	public Status getStatus() {
+//		return status;
+//	}
+//
+//	public void setStatus(Status status) {
+//		this.status = status;
+//	}
 
 	public WhoisResult getWhoisResult() {
 		return whoisResult;
+	}
+
+	public ExtractResult getExtractResult() {
+		extractResult.setPolicyUrl(policyUrl);
+		extractResult.setPolicy(policy);
+		extractResult.setWhoisResult(whoisResult);
+		extractResult.setStatus(status);
+		return extractResult;
+	}
+
+	public void setExtractResult(ExtractResult extractResult) {
+		this.extractResult = extractResult;
 	}
 }

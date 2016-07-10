@@ -25,10 +25,17 @@
 	</select>
 	
 	<select id="selectById" parameterType="int" resultMap="result">
-		select * from policies where id>=#{id};
+		select * from policies where id>=#{id} and policyUrl!='';
+	</select>
+	
+	<select id="getAllDistinctPolicy" resultType="DPolicy">
+		select * from distinctpolicy where id=198;
 	</select>
 	<update id="updatePolicyUrlById" >
 		update policies set policyUrl=#{policyUrl}, policy=#{policy} where id=#{id};
+	</update>
+	<update id="updatePolicyByPolicyUrl" >
+		update policies set policy=#{policy} where policyUrl=#{policyUrl}
 	</update>
 	<!-- 
 	<select id="getById" parameterType="int" resultMap="result">

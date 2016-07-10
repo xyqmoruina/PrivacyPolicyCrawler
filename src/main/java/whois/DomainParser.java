@@ -46,13 +46,14 @@ public class DomainParser {
 		}
 	}
 	/**
-	 * http://www.example.com will get 'com'
+	 * www.example.com will get 'com'
 	 * @param url
 	 * @return
 	 */
 	public String getTld(String url) {
 		String tld = "";
-		String[] str = url.split("//")[1].split("\\.");
+		//String[] str = url.split("//")[1].split("\\.");
+		String[] str = url.split("\\.");
 		tld = str[str.length - 2] + "." + str[str.length - 1];
 
 		if (!specialCase.contains(tld)) {
@@ -64,7 +65,9 @@ public class DomainParser {
 	public String getRegistableDomain(String url) {
 		String result = "";
 		String tld=getTld(url);
-		String[] s=url.split("//")[1].split("\\.");
+		//String[] s=url.split("//")[1].split("\\.");
+		String[] s=url.split("\\.");
+
 		if(specialCase.contains(tld)){
 			//www.example.co.uk will get example.co.uk
 			result=s[s.length-3]+"."+tld;
@@ -98,7 +101,10 @@ public class DomainParser {
 		
 		DomainParser parser = new DomainParser();
 		List<String> urls=parser.loadTarget(DomainParser.class.getResource("/list.txt").getPath());
-		urls.stream().forEach(o->{System.out.println(o+"  "+parser.getRegistableDomain(o)+"  "+parser.getTld(o));});
+		//urls.stream().forEach(o->{System.out.println(o+"  "+parser.getRegistableDomain(o)+"  "+parser.getTld(o));});
+		for(String o:urls){
+			System.out.println(o+"  "+parser.getRegistableDomain(o)+"  "+parser.getTld(o));
+		}
 	}
 
 }

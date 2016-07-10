@@ -28,29 +28,41 @@ public class MyLogger {
 		createDir(this.path); //initial logging directory
 		createDir(this.harPath); //default direcotory for har file
 	}
-
+	/**
+	 * create new directory, delete before create if already exists
+	 * @param path
+	 */
 	public void createDir(String path) {
-		Path dir;
+		//Path dir;
 		// initial logging directory
 		try {
-			dir = Files.createDirectory(Paths.get(path));
+			//dir = Files.createDirectory(Paths.get(path));
+			Files.createDirectory(Paths.get(path));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			dir = Paths.get(path);
-			System.out.println("Clean " + dir.getFileName());
-			try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
-				for (Path file : stream) {
-					// TODO: recursively
-					System.out.println("Delete: " + dir.getFileName() + "/" + file.getFileName());
-					Files.delete(file);
-				}
-			} catch (IOException | DirectoryIteratorException x) {
-				// IOException can only be thrown by newDirectoryStream.
-				System.err.println(x);
-			}
+			//dir = Paths.get(path);
+			//System.out.println("Clean " + dir.getFileName());
+			cleanDir(path);
 		}
 	}
-
+	
+	/**
+	 * clean given directory
+	 * @param dir
+	 */
+	public void cleanDir(String path){
+		Path dir=Paths.get(path);
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
+			for (Path file : stream) {
+				// TODO: recursively
+				System.out.println("Delete: " + dir.getFileName() + "/" + file.getFileName());
+				Files.delete(file);
+			}
+		} catch (IOException | DirectoryIteratorException x) {
+			// IOException can only be thrown by newDirectoryStream.
+			System.err.println(x);
+		}
+	}
 	/**
 	 * Write to file under logging directory, clean content if file already
 	 * exist
@@ -97,11 +109,11 @@ public class MyLogger {
 	public static void main(String[] args) throws IOException {
 		// for(File file: dir.listFiles()) file.delete();
 
-		MyLogger logger = new MyLogger("links/bbc");
-		//logger.toFile("1.txt", "F321321\n");
-		//logger.toFile("1.txt", "fdsafdsa\n");
-		//logger.toLog("log.txt", "213213\n");
-		//logger.toLog("log.txt", "uuuun");
+		MyLogger logger = new MyLogger("links/test");
+		logger.toFile("1.txt", "F321321\n");
+		logger.toFile("1.txt", "fdsafdsa\n");
+		logger.toLog("log.txt", "213213\n");
+		logger.toLog("log.txt", "uuuun");
 
 	}
 }
