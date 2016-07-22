@@ -29,13 +29,22 @@
 	</select>
 	
 	<select id="getAllDistinctPolicy" resultType="DPolicy">
-		select * from distinctpolicy where id=198;
+		select * from distinctpolicy;
+	</select>
+	<select id="getDistinctPolicyById" resultType="DPolicy">
+		select * from distinctpolicy where id=#{id};
 	</select>
 	<update id="updatePolicyUrlById" >
 		update policies set policyUrl=#{policyUrl}, policy=#{policy} where id=#{id};
 	</update>
 	<update id="updatePolicyByPolicyUrl" >
-		update policies set policy=#{policy} where policyUrl=#{policyUrl}
+		update policies set policy=#{policy} where policyUrl=#{policyUrl};
+	</update>
+	<update id="updateDistinctPolicy">
+		update distinctPolicy set policyUrl=#{policyUrl}, policy=#{policy} where id=#{id}
+	</update>
+	<update id="tempDp">
+		update distinctPolicy set policy=#{policy} where id=#{id}
 	</update>
 	<!-- 
 	<select id="getById" parameterType="int" resultMap="result">

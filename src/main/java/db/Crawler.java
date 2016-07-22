@@ -214,8 +214,7 @@ public class Crawler {
 
 		return entry;
 	}
-
-	public static void main(String args[]) throws IOException {
+	public static void singleUpdate(String url, int id) throws IOException{
 		String binPath = "/Users/jero/codebase/project/libs/Firefox.app/Contents/MacOS/firefox";
 		FirefoxBinary Binary = new FirefoxBinary(new File(binPath));
 		FirefoxProfile profile = new FirefoxProfile();
@@ -223,23 +222,65 @@ public class Crawler {
 		 WebDriver driver=new FirefoxDriver(Binary,profile);
 		 driver.manage().deleteAllCookies();
 		 
-		 driver.get("http://www.pornhub.com/information#privacy");
+		
+		 driver.get(url);
 		 try {
 			Thread.sleep(15000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(driver.getCurrentUrl());
-		//System.out.println(driver.getPageSource());
-		Files.write(Paths.get("pornhub.html"), driver.getPageSource().getBytes());
-//		SqlSessionFactoryBuilder builder;
-//		SqlSessionFactory factory;
+		url=driver.getCurrentUrl();
+		System.out.println(url);
+		String policy=driver.getPageSource();
+		
+		Files.write(Paths.get(String.valueOf(id)+".html"), driver.getPageSource().getBytes());
+		driver.quit();
+		SqlSessionFactoryBuilder builder;
+		SqlSessionFactory factory;
+
+		// Configure mybatis from mybatis-config.xml
+		builder = new SqlSessionFactoryBuilder();
+		factory = builder.build(Crawler.class.getResourceAsStream("/mybatis/mybatis-config.xml"));
+		SqlSession session=factory.openSession();
+		DistinctPolicy dp=session.selectOne("Policy.getDistinctPolicyById",id);
+		dp.setPolicy(policy);
+		dp.setPolicyUrl(url);
+		session.update("Policy.updateDistinctPolicy", dp);
+		session.commit();
+		session.close();
+	}
+	public static void main(String args[]) throws IOException {
+//		Path dir=Paths.get("htmls/hand review/");
+//		try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
+//			for (Path file : stream) {
+//				String policy="";
+//				System.out.println("" + dir.getFileName() + "/" + file.getFileName());
+//				try(BufferedReader br=Files.newBufferedReader(file)){
+//					policy=br.lines().collect(Collectors.joining());
+//				}
+//				DistinctPolicy dp=new DistinctPolicy();
+//				int id=Integer.valueOf(file.getFileName().toString().split("\\.")[0]);
+//				dp.setId(id);
+//				dp.setPolicy(policy);
+//				SqlSessionFactoryBuilder builder;
+//				SqlSessionFactory factory;
 //
-//		// Configure mybatis from mybatis-config.xml
-//		builder = new SqlSessionFactoryBuilder();
-//		factory = builder.build(Crawler.class.getResourceAsStream("/mybatis/mybatis-config.xml"));
-//		SqlSession session=factory.openSession();
+//				// Configure mybatis from mybatis-config.xml
+//				builder = new SqlSessionFactoryBuilder();
+//				factory = builder.build(Crawler.class.getResourceAsStream("/mybatis/mybatis-config.xml"));
+//				SqlSession session=factory.openSession();
+//				session.update("Policy.tempDp",dp);
+//				session.commit();
+//				session.close();
+//			}
+//		} catch (IOException | DirectoryIteratorException x) {
+//			// IOException can only be thrown by newDirectoryStream.
+//			System.err.println(x);
+//		}
+		singleUpdate("http://privacy.aol.com/",194);
+		//System.out.println(dp.getId()+dp.getPolicy()+dp.getPolicyUrl());
+		
 //		Policy p=session.selectOne("Policy.selectById",26);
 //		session.commit();
 //		session.close();
