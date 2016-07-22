@@ -416,7 +416,7 @@ public class PPCrawler {
 		List<String> list=new ArrayList<String>();
 		
 		for(Integer index:indexs){
-			System.out.println(index.intValue()+"\t"+totalList.get(index.intValue()));
+			System.out.println(index.intValue()+1+"\t"+totalList.get(index.intValue()));
 			list.add(totalList.get(index.intValue()));
 		}
 		int count = 0;
