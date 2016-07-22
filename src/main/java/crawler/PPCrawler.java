@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -197,9 +198,9 @@ public class PPCrawler {
 
 		FirefoxBinary Binary = new FirefoxBinary(new File(binPath));
 
-//		int retry = 0;
-//		do {
-		for(int retry=0; retry<MAX_RETRY;retry++){
+		// int retry = 0;
+		// do {
+		for (int retry = 0; retry < MAX_RETRY; retry++) {
 			FirefoxProfile profile = new FirefoxProfile();
 			setNetworkMonitorProfile(profile, harPath);
 			WebDriver driver = new FirefoxDriver(Binary, profile);
@@ -212,7 +213,8 @@ public class PPCrawler {
 				List<HarEntry> entries = readHar(harPath);
 				for (HarEntry e : entries) {
 					links.add(extractDomain(e.getRequest().getUrl()));
-					//System.out.println("!!! " + extractDomain(e.getRequest().getUrl()));
+					// System.out.println("!!! " +
+					// extractDomain(e.getRequest().getUrl()));
 				}
 				retry = MAX_RETRY;
 			} catch (Exception ie) {
@@ -228,7 +230,7 @@ public class PPCrawler {
 			}
 			driver.quit();
 		}
-		//} while (retry++ < MAX_RETRY);
+		// } while (retry++ < MAX_RETRY);
 
 		return links;
 
@@ -260,10 +262,10 @@ public class PPCrawler {
 		Executor executor = new Executor() {
 			public void execute(CrawlDatum datum, CrawlDatums next) throws Exception {
 				String currentUrl = datum.getUrl();
-				 PolicyExtractor extractor = new PolicyExtractor(ifFirefox);
-				 extractor.extract(currentUrl);
-				 extractor.quit();
-				 storeResult(url, currentUrl, extractor.getExtractResult());
+				PolicyExtractor extractor = new PolicyExtractor(ifFirefox);
+				extractor.extract(currentUrl);
+				extractor.quit();
+				storeResult(url, currentUrl, extractor.getExtractResult());
 
 			}
 		};
@@ -293,36 +295,37 @@ public class PPCrawler {
 	}
 
 	/**
-	 * Read all har file(suppress warning) under given path and return url in har entries
+	 * Read all har file(suppress warning) under given path and return url in
+	 * har entries
 	 * 
 	 * @param path
 	 * @return
 	 * @throws IOException
 	 */
 	public List<HarEntry> readHar(String path) throws Exception {
-		//System.out.println(path);
+		// System.out.println(path);
 		List<HarEntry> entry = null;
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(path))) {
 			System.out.println(path);
 
 			for (Path s : stream) {
 				HarFileReader r = new HarFileReader();
-				//read har file and suppress warnings
-				List<HarWarning> warnings=new ArrayList<HarWarning>();
-				System.out.println("Reading: "+s.toUri());
-				HarLog log = r.readHarFile(s.toFile(),warnings);
-				
-				//HarLog log=r.readHarFile(new File("Autoexport_16y0701_114203.har"),warnings);
+				// read har file and suppress warnings
+				List<HarWarning> warnings = new ArrayList<HarWarning>();
+				System.out.println("Reading: " + s.toUri());
+				HarLog log = r.readHarFile(s.toFile(), warnings);
+
+				// HarLog log=r.readHarFile(new
+				// File("Autoexport_16y0701_114203.har"),warnings);
 				HarEntries entries = log.getEntries();
 				entry = entries.getEntries();
-				for(HarWarning w:warnings){
-					System.err.println("Warning: "+w+"in "+path);
+				for (HarWarning w : warnings) {
+					System.err.println("Warning: " + w + "in " + path);
 				}
 			}
-		}catch(JsonParseException e){
-			System.err.println("Parsing: "+path+" fail");
-		}
-		catch (DirectoryIteratorException | IOException ex) {
+		} catch (JsonParseException e) {
+			System.err.println("Parsing: " + path + " fail");
+		} catch (DirectoryIteratorException | IOException ex) {
 			// I/O error encounted during the iteration, the cause is an
 			ex.printStackTrace();
 		}
@@ -400,22 +403,34 @@ public class PPCrawler {
 	}
 
 	public static void main(String[] args) throws IOException {
-
-		List<String> list = Files.lines(Paths.get(PPCrawler.class.getResource("/list.txt").getPath())).skip(20).limit(20)
+		// choose top 100
+		// List<String> list =
+		// Files.lines(Paths.get(PPCrawler.class.getResource("/list.txt").getPath())).skip(20).limit(20)
+		// .collect(Collectors.toList());
+		
+		// choose random 100 from top 1000
+		List<String> totalList = Files.lines(Paths.get(PPCrawler.class.getResource("/top1000.txt").getPath()))
 				.collect(Collectors.toList());
+		//boxed map int to Integer
+		List<Integer> indexs=new Random().ints(1,1001).distinct().limit(100).boxed().collect(Collectors.toList());
+		List<String> list=new ArrayList<String>();
+		
+		for(Integer index:indexs){
+			System.out.println(index.intValue()+"\t"+totalList.get(index.intValue()));
+			list.add(totalList.get(index.intValue()));
+		}
 		int count = 0;
 		for (String url : list) {
-			// list.stream().forEach((url) -> {
 			System.out.println(count++ + "\t" + url);
 
-			//PPCrawler ppc = new PPCrawler("links/" + url);
-			//ppc.gather("http://" + url, true);
-			//ppc.gathering("http://" + url, 20);
-			// });
+			// PPCrawler ppc = new PPCrawler("links/" + url);
+			// ppc.gather("http://" + url, true);
+			// ppc.gathering("http://" + url, 20);
+
 		}
-		String url="bestbuy.com";
-		PPCrawler ppc = new PPCrawler("links/" + url);
-		ppc.gather("http://"+url, true);
+//		String url = "bestbuy.com";
+//		PPCrawler ppc = new PPCrawler("links/" + url);
+//		ppc.gather("http://" + url, true);
 	}
 
 	public String getCrawlerDir() {

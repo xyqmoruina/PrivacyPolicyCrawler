@@ -11,6 +11,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -24,179 +26,193 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 /**
  * Simple demo showing how to make a successful request to Alexa Top Sites.
  * <p/>
- * Note that you must sign up for Alexa Top Sites
- * at http://aws.amazon.com/alexatopsites before running this demo.
+ * Note that you must sign up for Alexa Top Sites at
+ * http://aws.amazon.com/alexatopsites before running this demo.
  */
 public class TopSites {
-    protected static final String ACTION_NAME = "TopSites";
-    protected static final String RESPONSE_GROUP_NAME = "Country";
-    protected static final String SERVICE_HOST = "ats.amazonaws.com";
-    protected static final String AWS_BASE_URL = "http://" + SERVICE_HOST + "/?";
+	protected static final String ACTION_NAME = "TopSites";
+	protected static final String RESPONSE_GROUP_NAME = "Country";
+	protected static final String SERVICE_HOST = "ats.amazonaws.com";
+	protected static final String AWS_BASE_URL = "http://" + SERVICE_HOST + "/?";
 
-    protected static final int NUMBER_TO_RETURN = 600;
-    protected static final int START_NUMBER = 1;
-    protected static final String DATEFORMAT_AWS = "yyyy-MM-dd'T'HH:mm:ss";
-    private static final String HASH_ALGORITHM = "HmacSHA256";
+	protected static final int NUMBER_TO_RETURN = 100;
 
-    private String accessKeyId;
-    private String secretAccessKey;
-    private String countryCode;
+	protected static final String DATEFORMAT_AWS = "yyyy-MM-dd'T'HH:mm:ss";
+	private static final String HASH_ALGORITHM = "HmacSHA256";
 
-    public TopSites(String accessKeyId, String secretAccessKey, String countryCode) {
-        this.accessKeyId = accessKeyId;
-        this.secretAccessKey = secretAccessKey;
-        this.countryCode = countryCode;
-    }
+	private String accessKeyId;
+	private String secretAccessKey;
+	private String countryCode;
+	private int START_NUMBER = 1;
 
-    /**
-     * Computes RFC 2104-compliant HMAC signature.
-     *
-     * @param data data to be signed.
-     * @return base64-encoded RFC 2104-compliant HMAC signature.
-     * @throws java.security.SignatureException
-     *          when signature generation fails
-     */
-    protected String generateSignature(String data)
-        throws java.security.SignatureException {
-        String result;
-        try {
-            // get an hmac key from the raw key bytes
-            SecretKeySpec signingKey =
-                new SecretKeySpec(secretAccessKey.getBytes(),
-                                  HASH_ALGORITHM);
+	public TopSites(String accessKeyId, String secretAccessKey, String countryCode) {
+		this.accessKeyId = accessKeyId;
+		this.secretAccessKey = secretAccessKey;
+		this.countryCode = countryCode;
+	}
 
-            // get a mac instance and initialize with the signing key
-            Mac mac = Mac.getInstance(HASH_ALGORITHM);
-            mac.init(signingKey);
+	public void setStartNumber(int start) {
+		this.START_NUMBER = start;
+	}
 
-            // compute the hmac on input data bytes
-            byte[] rawHmac = mac.doFinal(data.getBytes());
+	/**
+	 * Computes RFC 2104-compliant HMAC signature.
+	 *
+	 * @param data
+	 *            data to be signed.
+	 * @return base64-encoded RFC 2104-compliant HMAC signature.
+	 * @throws java.security.SignatureException
+	 *             when signature generation fails
+	 */
+	protected String generateSignature(String data) throws java.security.SignatureException {
+		String result;
+		try {
+			// get an hmac key from the raw key bytes
+			SecretKeySpec signingKey = new SecretKeySpec(secretAccessKey.getBytes(), HASH_ALGORITHM);
 
-            // base64-encode the hmac
-            result = new BASE64Encoder().encode(rawHmac);
+			// get a mac instance and initialize with the signing key
+			Mac mac = Mac.getInstance(HASH_ALGORITHM);
+			mac.init(signingKey);
 
-        } catch (Exception e) {
-            throw new SignatureException("Failed to generate HMAC : "
-                                         + e.getMessage());
-        }
-        return result;
-    }
+			// compute the hmac on input data bytes
+			byte[] rawHmac = mac.doFinal(data.getBytes());
 
-    /**
-     * Generates a timestamp for use with AWS request signing
-     *
-     * @param date current date
-     * @return timestamp
-     */
-    public static String getTimestampFromLocalTime(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat(DATEFORMAT_AWS);
-        format.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return format.format(date);
-    }
+			// base64-encode the hmac
+			result = new BASE64Encoder().encode(rawHmac);
 
-    /**
-     * Builds the query string
-     */
-    protected String buildQuery() throws UnsupportedEncodingException {
-        String timestamp = getTimestampFromLocalTime(Calendar.getInstance().getTime());
+		} catch (Exception e) {
+			throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
+		}
+		return result;
+	}
 
-        // TreeMap puts keys in alphabetical order
-        Map<String, String> queryParams = new TreeMap<String, String>();
-        queryParams.put("Action", ACTION_NAME);
-        queryParams.put("ResponseGroup", RESPONSE_GROUP_NAME);
-        queryParams.put("AWSAccessKeyId", accessKeyId);
-        queryParams.put("Timestamp", URLEncoder.encode(timestamp, "UTF-8"));
-        queryParams.put("CountryCode", countryCode);
-        queryParams.put("Count", "" + NUMBER_TO_RETURN);
-        queryParams.put("Start", "" + START_NUMBER);
-        queryParams.put("SignatureVersion", "2");
-        queryParams.put("SignatureMethod", HASH_ALGORITHM);
+	/**
+	 * Generates a timestamp for use with AWS request signing
+	 *
+	 * @param date
+	 *            current date
+	 * @return timestamp
+	 */
+	public static String getTimestampFromLocalTime(Date date) {
+		SimpleDateFormat format = new SimpleDateFormat(DATEFORMAT_AWS);
+		format.setTimeZone(TimeZone.getTimeZone("GMT"));
+		return format.format(date);
+	}
 
-        String query = "";
-        boolean first = true;
-        for (String name : queryParams.keySet()) {
-            if (first)
-                first = false;
-            else
-                query += "&";
+	/**
+	 * Builds the query string
+	 */
+	protected String buildQuery() throws UnsupportedEncodingException {
+		String timestamp = getTimestampFromLocalTime(Calendar.getInstance().getTime());
 
-            query += name + "=" + queryParams.get(name);
-        }
+		// TreeMap puts keys in alphabetical order
+		Map<String, String> queryParams = new TreeMap<String, String>();
+		queryParams.put("Action", ACTION_NAME);
+		queryParams.put("ResponseGroup", RESPONSE_GROUP_NAME);
+		queryParams.put("AWSAccessKeyId", accessKeyId);
+		queryParams.put("Timestamp", URLEncoder.encode(timestamp, "UTF-8"));
+		queryParams.put("CountryCode", countryCode);
+		queryParams.put("Count", "" + NUMBER_TO_RETURN);
+		queryParams.put("Start", "" + START_NUMBER);
+		queryParams.put("SignatureVersion", "2");
+		queryParams.put("SignatureMethod", HASH_ALGORITHM);
 
-        return query;
-    }
+		String query = "";
+		boolean first = true;
+		for (String name : queryParams.keySet()) {
+			if (first)
+				first = false;
+			else
+				query += "&";
 
-    /**
-     * Parses response and return result as List
-     *
-     * @param in stream containing response xml
-     */
-    private static List<String> parseResponse(InputStream in) throws Exception {
-        List<String> list =new ArrayList<String>();
-    	// Parse the response
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        Document responseDoc = dbf.newDocumentBuilder().parse(in);
+			query += name + "=" + queryParams.get(name);
+		}
 
-        NodeList responses = responseDoc.getElementsByTagNameNS("*", "Site");
+		return query;
+	}
 
-        for (int i = 0; i < responses.getLength(); i++) {
-            Element response = (Element) responses.item(i);
-            Element node = (Element)
-                response.getElementsByTagNameNS("*", "DataUrl").item(0);
-            String siteUrl = node.getFirstChild().getNodeValue();
-            //System.out.println(siteUrl);
-            list.add(siteUrl);
-        }
-        return list;
-    }
-    
+	/**
+	 * Parses response and return result as List
+	 *
+	 * @param in
+	 *            stream containing response xml
+	 */
+	private static List<String> parseResponse(InputStream in) throws Exception {
+		List<String> list = new ArrayList<String>();
+		// Parse the response
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf.setNamespaceAware(true);
+		Document responseDoc = dbf.newDocumentBuilder().parse(in);
 
-    /**
-     * Makes a request to the Alexa Top Sites web service
-     */
-    public static void main(String[] args) throws Exception {
-//        if (args.length < 2) {
-//            System.out.println("Usage: java AlexaTopSites ACCESS_KEY_ID " +
-//                               "SECRET_ACCESS_KEY [COUNTRY_CODE]");
-//            System.exit(-1);
-//        }
-        String accessKey ="";
-        String secretKey = "";
-        String countryCode = "US";
+		NodeList responses = responseDoc.getElementsByTagNameNS("*", "Site");
 
-        TopSites topSites = new TopSites(accessKey, secretKey, countryCode);
-        String query = topSites.buildQuery();
+		for (int i = 0; i < responses.getLength(); i++) {
+			Element response = (Element) responses.item(i);
+			Element node = (Element) response.getElementsByTagNameNS("*", "DataUrl").item(0);
+			String siteUrl = node.getFirstChild().getNodeValue();
+			// System.out.println(siteUrl);
+			list.add(siteUrl);
+		}
+		return list;
+	}
 
-        String toSign = "GET\n" + SERVICE_HOST + "\n/\n" + query;
+	/**
+	 * Makes a request to the Alexa Top Sites web service
+	 */
+	public static void main(String[] args) throws Exception {
+		// if (args.length < 2) {
+		// System.out.println("Usage: java AlexaTopSites ACCESS_KEY_ID " +
+		// "SECRET_ACCESS_KEY [COUNTRY_CODE]");
+		// System.exit(-1);
+		// }
+		List<String> rootkey = Files.lines(Paths.get("/Users/jero/codebase/project/rootkey-2.csv"))
+				.map(s -> s.split("=")[1]).collect(Collectors.toList());
+		String accessKey = rootkey.get(0);
+		String secretKey = rootkey.get(1);
+		String countryCode = "US";
 
-        System.out.println("String to sign:\n" + toSign + "\n");
+		TopSites topSites = new TopSites(accessKey, secretKey, countryCode);
 
-        String signature = topSites.generateSignature(toSign);
+		for (int i = 1; i < 1001; i += 100) {
+			topSites.setStartNumber(i);
+			String query = topSites.buildQuery();
+			String toSign = "GET\n" + SERVICE_HOST + "\n/\n" + query;
+			// System.out.println("String to sign:\n" + toSign + "\n");
+			String signature = topSites.generateSignature(toSign);
+			String uri = AWS_BASE_URL + query + "&Signature=" + URLEncoder.encode(signature, "UTF-8");
+			// Make request
+			System.out.println("\nMaking request to: " + uri + "\n");
 
-        String uri = AWS_BASE_URL + query +
-            "&Signature=" + URLEncoder.encode(signature, "UTF-8");
+			URL url = new URL(uri);
+			URLConnection conn = url.openConnection();
+			InputStream in = conn.getInputStream();
 
-        // Make request
-        System.out.println("\nMaking request to: " + uri + "\n");
+			List<String> list = parseResponse(in);
+			//List<String> list=new ArrayList<String>();
+			List<String> tldFilter = Arrays.asList("com");// only gathering .com
+			// try(BufferedWriter
+			// bw=Files.newBufferedWriter(Paths.get(TopSites.class.getResource("/randomlist.txt").getPath()))){
+//			try (BufferedWriter bw = Files.newBufferedWriter(Paths.get("top1000.txt"))) {
+//
+//				for (String u : list) {
+//					System.out.println(u);
+//					bw.write(u + "\n");
+//				}
+//				// list.stream().forEach(System.out::println);
+//			}
+			try (BufferedWriter bw = new BufferedWriter(new FileWriter("top1000.txt", true))) {
+				for (String u : list) {
+				//System.out.println(u);
+				bw.write(u + "\n");
+			}
+			} catch (IOException e) {
+				System.err.println(e);
+			}
+		}
 
-        URL url = new URL(uri);
-        URLConnection conn = url.openConnection();
-        InputStream in = conn.getInputStream();
-       
-        List<String> list=parseResponse(in);
-        List<String> tldFilter = Arrays.asList("com");// only gathering .com
-        try(BufferedWriter bw=Files.newBufferedWriter(Paths.get(TopSites.class.getResource("/list.txt").getPath()))){
-//        	for(String u:list){
-//        		System.out.println(u);
-//        		bw.write(u+"\n");
-//        	}
-        	list.stream().forEach(System.out::println);
-        }
-    }
+	}
 
 }
